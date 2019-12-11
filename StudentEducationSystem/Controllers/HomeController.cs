@@ -86,6 +86,7 @@ namespace StudentEducationSystem.Controllers
                 if (student != null)
                 {
                     FormsAuthentication.SetAuthCookie(student.Username.ToString(), false);
+                    Session["username"] = Username;
                     return true;
 
                 }

@@ -127,8 +127,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ExamController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
+    <Compile Include="Controllers\StatisticController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Global.asax.cs">
@@ -308,6 +310,8 @@
     <Content Include="Views\Teacher\MyStudents.cshtml" />
     <Content Include="Views\Teacher\Profil.cshtml" />
     <Content Include="Views\Question\Index.cshtml" />
+    <Content Include="Views\Exam\TakeTheExam.cshtml" />
+    <Content Include="Views\Statistic\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

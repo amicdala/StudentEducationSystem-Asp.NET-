@@ -1,0 +1,134 @@
+﻿@model IEnumerable<StudentEducationSystem.Models.Question>
+@{
+    ViewBag.Title = "TakeTheExam";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+    int i = 0;
+}
+
+<div class="container">
+    <div class="row mt-5">
+
+        @foreach (var question in Model)
+        {
+            i += 1;
+            var data = question.Picture;
+            if (!String.IsNullOrEmpty(data))
+            {
+                if (question.Picture.Substring(0, 40).Contains(","))
+                {
+                    data = question.Picture.Split(',')[1];
+                }
+            }
+            var imgSrc = String.Format("data:image/gif;base64,{0}", data);
+
+
+        <div class="card mx-1" style="width: 18rem;">
+            @if (imgSrc.Length > 22)
+            {
+                <img src="@imgSrc" class="card-img-top" alt="soru">
+            }
+            <div class="card-body">
+                <h5 class="card-title">Soru : @i</h5>
+                <p class="card-text">@question.Title</p>
+            </div>
+            <div class="form-check">
+                
+            </div>
+            <div class="form-check">
+                
+            </div>
+            <div class="form-check">
+                
+            </div>
+            
+            <ul class="list-group list-group-flush">
+                @if (i % 2 == 0)
+                {
+                    <li class="list-group-item mx-2">
+                        <label class="form-check-label" for="radio1">
+                            <input type="radio" class="form-check-input" id="radio1" name="optradio+@i">@question.Answer
+                        </label>
+
+                    </li>
+                    <li class="list-group-item mx-2">
+                        <label class="form-check-label" for="radio2">
+                            <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceOne
+                        </label>
+
+                    </li>
+                    <li class="list-group-item mx-2">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="optradio+@i">@question.ChoiceTwo
+                        </label>
+
+                    </li>
+                    <li class="list-group-item mx-2">
+                        <label class="form-check-label" for="radio2">
+                            <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceThree
+                        </label>
+
+                    </li>
+                }
+                else if (i % 3 == 0)
+                {
+                    <li class="list-group-item mx-2">
+                        <label class="form-check-label" for="radio1">
+                            <input type="radio" class="form-check-input" name="optradio+@i">@question.ChoiceTwo
+
+                        </label>
+
+                    </li>
+                    <li class="list-group-item mx-2">
+                        <label class="form-check-label" for="radio2">
+                            <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceOne
+                        </label>
+
+                    </li>
+                    <li class="list-group-item mx-2">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" id="radio1" name="optradio+@i">@question.Answer
+                        </label>
+
+                    </li>
+                    <li class="list-group-item mx-2">
+                        <label class="form-check-label" for="radio2">
+                            <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceThree
+                        </label>
+
+                    </li>
+                }
+                else
+                {
+                    <li class="list-group-item mx-2">
+                        <label class="form-check-label" for="radio1">
+                            <input type="radio" class="form-check-input" name="optradio+@i">@question.ChoiceTwo
+
+                        </label>
+
+                    </li>
+                    <li class="list-group-item mx-2">
+                        <label class="form-check-label" for="radio2">
+                            <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceOne
+                        </label>
+
+                    </li>
+                    <li class="list-group-item mx-2">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceThree
+                        </label>
+
+                    </li>
+                    <li class="list-group-item mx-2">
+                        <label class="form-check-label" for="radio2">
+                            <input type="radio" class="form-check-input" id="radio1" name="optradio+@i">@question.Answer
+                            
+                        </label>
+
+                    </li>
+                }
+            </ul>
+
+        </div>
+        }
+    </div>
+</div>

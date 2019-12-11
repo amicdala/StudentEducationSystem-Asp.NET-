@@ -30,10 +30,10 @@
                             <a class="nav-link" href="/Student/Index">Anasayfa <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">İstatiklerim</a>
+                            <a class="nav-link" href="/Statistic/Index">İstatiklerim</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Sınav Ol</a>
+                            <a class="nav-link" href="/Exam/TakeTheExam">Sınav Ol</a>
                         </li>
 
                     </ul>
@@ -47,32 +47,11 @@
     </header>
 
     <main role="main">
-
-        <section class="jumbotron text-center">
-            <div class="container">
-                <h1 class="jumbotron-heading">Sanal Eğitim Sistemi</h1>
-                <p class="lead text-muted">Öğrencilerinizi takip edebileceğiniz onlara soru ekleyebileceğiniz bir sistem.</p>
-                <p>
-                    <a href="" class="btn btn-primary my-2">Sınav Ol</a>
-                    <a href="" class="btn btn-secondary my-2">İstatikleri Görüntüle</a>
-                </p>
-            </div>
-        </section>
-
-        <div class="album py-5 bg-light">
-            <div class="container">
-
-                <div class="row">
-                    @RenderBody()
-
-                </div>
-            </div>
-        </div>
-
+        @RenderBody()
     </main>
 
     <footer class="text-muted">
-        <div class="container">
+        <div class="container" style="text-align:center;">
             Copyright © 2019 <a href="#">Bizim Eğitim</a><br />
 
         </div>
