@@ -1,0 +1,78 @@
+﻿
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Öğretmen Ekranı</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    
+
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container d-flex justify-content-between">
+                <a href="/Teacher/Index" class="navbar-brand d-flex align-items-center">
+                    <strong>Bizim Eğitim</strong>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active">
+                            <a class="nav-link active" href="/Teacher/Index">Anasayfa <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/Teacher/MyStudents">Öğrencilerim</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/Question/Index">Sorular</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/Question/Create">Soru Ekle</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="wrapper" style="float:right">
+                    <a href="/Home/Logout">@HttpContext.Current.User.Identity.Name</a>
+                </div>
+            </div>
+        </nav>
+
+    </header>
+
+    <main role="main">
+        <div class="album py-5">
+
+            @RenderBody()
+
+
+        </div>
+    </main>
+
+    <footer class="text-muted" style="text-align:center;">
+        <div class="container">
+            Copyright © 2019 <a href="#">Bizim Eğitim</a><br />
+
+        </div>
+    </footer>
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    <script src="~/Scripts/toastr.config.js"></script>
+    @ToastrHelper.ProcessToastrs()
+    @RenderSection("_Scripts", false)
+</body>
+
+</html>
+

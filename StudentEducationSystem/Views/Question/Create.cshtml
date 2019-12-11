@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "AddQuestion";
+    Layout = "~/Views/Shared/_TeacherLayout.cshtml";
+}
+<style>
+    #head{
+        color:blue;
+    }
+</style>
+<div class="container">
+    @using (Html.BeginForm("Create", "Question", FormMethod.Post,
+                            new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+    <fieldset>
+        <legend class="text-xs-center header" id="head">Soru Ekle</legend>
+
+        <div class="form-group">
+            <label id="head">Soru</label>
+            <input type="text" name="title" class="form-control" placeholder="Soru" required>
+        </div>
+        <div class="form-group">
+            <label id="head">Resim Yükle</label>
+            <input type="file" name="file" id="file" class="form-control-file">
+        </div>
+        
+        <div class="form-group">
+            <label id="head">Konu</label>
+            @Html.DropDownList("Categories",null,new { @class="form-control"})
+        </div>
+        <div class="form-group">
+            <label id="head">Cevap</label>
+            <input type="text" name="answer" class="form-control" placeholder="Cevap" required>
+        </div>
+
+        <div class="form-group">
+            <label id="head">Seçenek 1</label>
+            <input type="text" name="choiceOne" class="form-control" placeholder="Birinci Şık" required>
+        </div>
+        <div class="form-group">
+            <label id="head">Seçenek 2</label>
+            <input type="text" name="choiceTwo" class="form-control" placeholder="İkinci Şık" required>
+        </div>
+        <div class="form-group">
+            <label id="head">Seçenek 3</label>
+            <input type="text" name="choiceThree" class="form-control" placeholder="Üçüncü Şık" required>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Ekle</button>
+    </fieldset>
+
+    }
+</div>
+
+

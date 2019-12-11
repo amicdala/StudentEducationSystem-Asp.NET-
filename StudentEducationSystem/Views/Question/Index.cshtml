@@ -1,0 +1,43 @@
+﻿@model IEnumerable<StudentEducationSystem.Models.Question>
+@{
+    ViewBag.Title = "Questions";
+    Layout = "~/Views/Shared/_TeacherLayout.cshtml";
+}
+
+
+<div class="container">
+    <div class="row">
+        @foreach (var question in Model)
+        {
+            var data = question.Picture;
+            if (!String.IsNullOrEmpty(data))
+            {
+                if (question.Picture.Substring(0, 40).Contains(","))
+                {
+                    data = question.Picture.Split(',')[1];
+                }
+            }
+            var imgSrc = String.Format("data:image/gif;base64,{0}", data);
+
+
+                
+            <div class="card col-md-4">
+                @if (imgSrc.Length > 22)
+                {
+                    <img class="card-img-top" src="@imgSrc" alt="soru" style="max-width:100%">
+                }
+                <div class="card-body">
+                    <h5 class="card-title">Soru</h5>
+                    <p class="card-text">@question.Title</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+
+
+
+
+
+        }
+
+    </div>
+</div>
