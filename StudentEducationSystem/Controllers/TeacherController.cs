@@ -24,9 +24,6 @@ namespace StudentEducationSystem.Controllers
 
         public ActionResult MyStudents()
         {
-
-            var name = HttpContext.User.Identity.Name;
-            var userId = context.Users.FirstOrDefault(x => x.Username == HttpContext.User.Identity.Name).Id;
             
             return View();
         }

@@ -33,13 +33,11 @@ namespace StudentEducationSystem.Controllers
             {
                 if (Role == "T")
                 {
-
-                    ToastrService.AddToUserQueue(null, "Giriş Başarılı", ToastrType.Success);
                     return RedirectToAction("Index", "Teacher");
                 }
                 else if (Role == "S")
                 {
-                    ToastrService.AddToUserQueue(null, "Giriş Başarılı", ToastrType.Success);
+                    
                     return RedirectToAction("Index", "Student");
                 }
                 else
@@ -74,6 +72,7 @@ namespace StudentEducationSystem.Controllers
                 {
                     FormsAuthentication.SetAuthCookie(teacher.Username.ToString(), false);
                     Session["username"] = Username;
+                    ToastrService.AddToUserQueue(null, "Giriş Başarılı", ToastrType.Success);
                     return true;
                 }
                 else
@@ -87,6 +86,7 @@ namespace StudentEducationSystem.Controllers
                 {
                     FormsAuthentication.SetAuthCookie(student.Username.ToString(), false);
                     Session["username"] = Username;
+                    ToastrService.AddToUserQueue(null, "Giriş Başarılı", ToastrType.Success);
                     return true;
 
                 }

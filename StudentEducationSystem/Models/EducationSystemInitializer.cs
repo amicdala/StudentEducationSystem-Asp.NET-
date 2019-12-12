@@ -12,8 +12,8 @@ namespace StudentEducationSystem.Models
         {
             List<User> users = new List<User>()
             {
-                new User(){Username = "oguzhankaymak",Password="12345",Role = "T"},
-                new User(){Username = "huseyin",Password="12345",Role = "S"}
+                new User(){Name = "Oğuzhan",Surname = "Kaymak",Username = "oguzhankaymak",Password="12345",Role = "T"},
+                new User(){Name = "Hüseyin",Surname = "Kara",Username = "huseyin",Password="12345",Role = "S"}
 
             };
             foreach (var item in users)
@@ -24,7 +24,7 @@ namespace StudentEducationSystem.Models
 
             List<Teacher> teachers = new List<Teacher>()
             {
-                new Teacher() { Name = "Oğuzhan",Surname = "Kaymak",UserId = 1}
+                new Teacher() {DepartmentName="Matematik" ,UserId = 1}
             };
 
 
@@ -36,7 +36,7 @@ namespace StudentEducationSystem.Models
 
             List<Student> students = new List<Student>()
             {
-                new Student(){Name = "Hüseyin",Surname = "Kara",UserId=2,TeacherId = 1}
+                new Student(){UserId=2,TeacherId = 2}
             };
 
             foreach (var item in students)

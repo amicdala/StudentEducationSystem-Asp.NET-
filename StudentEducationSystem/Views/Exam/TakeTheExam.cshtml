@@ -4,6 +4,94 @@
     Layout = "~/Views/Shared/_StudentLayout.cshtml";
     int i = 0;
 }
+<style>
+    .card-counter{
+    box-shadow: 2px 2px 10px #DADADA;
+    margin: 5px;
+    padding: 20px 10px;
+    background-color: #fff;
+    height: 100px;
+    border-radius: 5px;
+    transition: .3s linear all;
+  }
+
+  .card-counter:hover{
+    box-shadow: 4px 4px 20px #DADADA;
+    transition: .3s linear all;
+  }
+
+  .card-counter.primary{
+    background-color: #007bff;
+    color: #FFF;
+  }
+
+  .card-counter.danger{
+    background-color: #ef5350;
+    color: #FFF;
+  }  
+
+  .card-counter.success{
+    background-color: #66bb6a;
+    color: #FFF;
+  }  
+
+  .card-counter.info{
+    background-color: #26c6da;
+    color: #FFF;
+  }  
+
+  .card-counter i{
+    font-size: 5em;
+    opacity: 0.2;
+  }
+
+  .card-counter .count-numbers{
+    position: absolute;
+    right: 35px;
+    top: 20px;
+    font-size: 32px;
+    display: block;
+  }
+
+  .card-counter .count-name{
+    position: absolute;
+    right: 35px;
+    top: 65px;
+    font-style: italic;
+    text-transform: capitalize;
+    opacity: 0.5;
+    display: block;
+    font-size: 18px;
+  }
+</style>
+<script>
+    $(document).ready(function () {
+    var saniye = 3600;
+    var sayacYeri = $("count-numbers");
+
+    $.sayimiBaslat = function () {
+        if (saniye > 1) {
+            saniye--;
+            sayacYeri.text(saniye);
+        } else {
+            $("count-numbers").text("Test Bitti");
+        }
+    }
+
+    sayacYeri.text(saniye);
+    setInterval("$.sayimiBaslat()", 1000);
+})
+  
+
+</script>
+<div class="col-md-2">
+    <div class="card-counter info">
+        <i class="fa fa-users"></i>
+        <span class="count-numbers">60:00</span>
+        <span class="count-name">Kalan Süre</span>
+    </div>
+</div>
+
 
 <div class="container">
     <div class="row mt-5">
@@ -22,113 +110,113 @@
             var imgSrc = String.Format("data:image/gif;base64,{0}", data);
 
 
-        <div class="card mx-1" style="width: 18rem;">
-            @if (imgSrc.Length > 22)
-            {
-                <img src="@imgSrc" class="card-img-top" alt="soru">
-            }
-            <div class="card-body">
-                <h5 class="card-title">Soru : @i</h5>
-                <p class="card-text">@question.Title</p>
-            </div>
-            <div class="form-check">
-                
-            </div>
-            <div class="form-check">
-                
-            </div>
-            <div class="form-check">
-                
-            </div>
-            
-            <ul class="list-group list-group-flush">
-                @if (i % 2 == 0)
+            <div class="card mx-1" style="width: 18rem;">
+                @if (imgSrc.Length > 22)
                 {
-                    <li class="list-group-item mx-2">
-                        <label class="form-check-label" for="radio1">
-                            <input type="radio" class="form-check-input" id="radio1" name="optradio+@i">@question.Answer
-                        </label>
-
-                    </li>
-                    <li class="list-group-item mx-2">
-                        <label class="form-check-label" for="radio2">
-                            <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceOne
-                        </label>
-
-                    </li>
-                    <li class="list-group-item mx-2">
-                        <label class="form-check-label">
-                            <input type="radio" class="form-check-input" name="optradio+@i">@question.ChoiceTwo
-                        </label>
-
-                    </li>
-                    <li class="list-group-item mx-2">
-                        <label class="form-check-label" for="radio2">
-                            <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceThree
-                        </label>
-
-                    </li>
+                    <img src="@imgSrc" class="card-img-top" alt="soru">
                 }
-                else if (i % 3 == 0)
-                {
-                    <li class="list-group-item mx-2">
-                        <label class="form-check-label" for="radio1">
-                            <input type="radio" class="form-check-input" name="optradio+@i">@question.ChoiceTwo
+                <div class="card-body">
+                    <h5 class="card-title">Soru : @i</h5>
+                    <p class="card-text">@question.Title</p>
+                </div>
+                <div class="form-check">
 
-                        </label>
+                </div>
+                <div class="form-check">
 
-                    </li>
-                    <li class="list-group-item mx-2">
-                        <label class="form-check-label" for="radio2">
-                            <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceOne
-                        </label>
+                </div>
+                <div class="form-check">
 
-                    </li>
-                    <li class="list-group-item mx-2">
-                        <label class="form-check-label">
-                            <input type="radio" class="form-check-input" id="radio1" name="optradio+@i">@question.Answer
-                        </label>
+                </div>
 
-                    </li>
-                    <li class="list-group-item mx-2">
-                        <label class="form-check-label" for="radio2">
-                            <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceThree
-                        </label>
+                <ul class="list-group list-group-flush">
+                    @if (i % 2 == 0)
+                    {
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio1">
+                                <input type="radio" class="form-check-input" id="radio1" name="optradio+@i">@question.Answer
+                            </label>
 
-                    </li>
-                }
-                else
-                {
-                    <li class="list-group-item mx-2">
-                        <label class="form-check-label" for="radio1">
-                            <input type="radio" class="form-check-input" name="optradio+@i">@question.ChoiceTwo
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceOne
+                            </label>
 
-                        </label>
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="optradio+@i">@question.ChoiceTwo
+                            </label>
 
-                    </li>
-                    <li class="list-group-item mx-2">
-                        <label class="form-check-label" for="radio2">
-                            <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceOne
-                        </label>
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceThree
+                            </label>
 
-                    </li>
-                    <li class="list-group-item mx-2">
-                        <label class="form-check-label">
-                            <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceThree
-                        </label>
+                        </li>
+                    }
+                    else if (i % 3 == 0)
+                    {
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio1">
+                                <input type="radio" class="form-check-input" name="optradio+@i">@question.ChoiceTwo
 
-                    </li>
-                    <li class="list-group-item mx-2">
-                        <label class="form-check-label" for="radio2">
-                            <input type="radio" class="form-check-input" id="radio1" name="optradio+@i">@question.Answer
-                            
-                        </label>
+                            </label>
 
-                    </li>
-                }
-            </ul>
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceOne
+                            </label>
 
-        </div>
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" id="radio1" name="optradio+@i">@question.Answer
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceThree
+                            </label>
+
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio1">
+                                <input type="radio" class="form-check-input" name="optradio+@i">@question.ChoiceTwo
+
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceOne
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceThree
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" id="radio1" name="optradio+@i">@question.Answer
+
+                            </label>
+
+                        </li>
+                    }
+                </ul>
+
+            </div>
         }
     </div>
 </div>
