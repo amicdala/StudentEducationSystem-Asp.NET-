@@ -139,6 +139,7 @@
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\EducationSystemContext.cs" />
     <Compile Include="Models\EducationSystemInitializer.cs" />
+    <Compile Include="Models\ExamCategory.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\Student.cs" />
     <Compile Include="Models\Teacher.cs" />
@@ -156,6 +157,7 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Counter.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\toastr.css" />

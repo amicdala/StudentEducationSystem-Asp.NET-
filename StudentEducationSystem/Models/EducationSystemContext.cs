@@ -20,6 +20,8 @@ namespace StudentEducationSystem.Models
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<ExamCategory> Exams { get; set; }
+
 
     }
 }   

@@ -13,7 +13,7 @@ namespace StudentEducationSystem.Models
             List<User> users = new List<User>()
             {
                 new User(){Name = "Oğuzhan",Surname = "Kaymak",Username = "oguzhankaymak",Password="12345",Role = "T"},
-                new User(){Name = "Hüseyin",Surname = "Kara",Username = "huseyin",Password="12345",Role = "S"}
+                new User(){Name = "Hüseyin",Surname = "Kara",Username = "huseyin",Password="123",Role = "S"}
 
             };
             foreach (var item in users)
@@ -36,7 +36,7 @@ namespace StudentEducationSystem.Models
 
             List<Student> students = new List<Student>()
             {
-                new Student(){UserId=2,TeacherId = 2}
+                new Student(){UserId=2,TeacherId = 1}
             };
 
             foreach (var item in students)
