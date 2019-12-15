@@ -19,7 +19,7 @@
     </div>
     <div class="col-md-8">
         <div class="row mt-5" style="display:block;font-size:1.5em">
-            @using (Html.BeginForm())
+            @using (Html.BeginForm("TakeTheExam","Exam",FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
                 foreach (var question in Model)
@@ -59,31 +59,31 @@
 
                             <li class="list-group-item mx-2">
                                 <label class="form-check-label" for="radio1">
-                                    <input type="radio" class="form-check-input" id="radio1" name="@question.Id">@question.Answer
+                                    <input type="radio" class="form-check-input" value="@question.Answer" name="@question.Id">@question.Answer
                                 </label>
 
                             </li>
                             <li class="list-group-item mx-2">
                                 <label class="form-check-label" for="radio2">
-                                    <input type="radio" class="form-check-input" id="radio2" name="@question.Id">@question.ChoiceOne
+                                    <input type="radio" class="form-check-input" value="@question.ChoiceOne" name="@question.Id">@question.ChoiceOne
                                 </label>
 
                             </li>
                             <li class="list-group-item mx-2">
                                 <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" name="@question.Id">@question.ChoiceTwo
+                                    <input type="radio" class="form-check-input" value="@question.ChoiceTwo" name="@question.Id">@question.ChoiceTwo
                                 </label>
 
                             </li>
                             <li class="list-group-item mx-2">
                                 <label class="form-check-label" for="radio2">
-                                    <input type="radio" class="form-check-input" id="radio2" name="@question.Id">@question.ChoiceThree
+                                    <input type="radio" class="form-check-input" value="@question.ChoiceThree" name="@question.Id">@question.ChoiceThree
                                 </label>
 
                             </li>
                             <li class="list-group-item mx-2">
                                 <label class="form-check-label" for="radio2">
-                                    <input type="radio" class="form-check-input" id="radio2" name="@question.Id">@question.ChoiceFour
+                                    <input type="radio" class="form-check-input" value="@question.ChoiceFour" name="@question.Id">@question.ChoiceFour
                                 </label>
 
                             </li>
