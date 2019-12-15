@@ -1,16 +1,19 @@
-﻿$(document).ready(function () {
-    var saniye = 3600;
-    var sayacYeri = $("count-numbers");
+﻿
+var second = 0, minute = 60, hour = 0;
 
-    $.sayimiBaslat = function () {
-        if (saniye > 1) {
-            saniye--;
-            sayacYeri.text(saniye);
-        } else {
-            $("count-numbers").text("Test Bitti");
+function show() {
+    if (second != 0) second = second - 1;
+    else {
+        second = 59;
+        if (minute != 0) minute = minute - 1;
+        else {
+            //SÜRE DOLDU    
         }
-    }
 
-    sayacYeri.text(saniye);
-    setInterval("$.sayimiBaslat()", 1000);
-})
+    }
+    $("#counter").html(hour + " : " + minute + " : " + second);
+}
+$(document).ready(function () {
+    $("#counter").html("0 : 60 : 0");
+    setInterval(show, 1000);
+});

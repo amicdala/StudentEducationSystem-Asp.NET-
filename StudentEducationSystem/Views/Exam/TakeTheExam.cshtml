@@ -6,108 +6,100 @@
 }
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <link href="~/Content/Counter.css" rel="stylesheet" />
+<script src="~/Scripts/counter.js"></script>
 
-<script type="text/javascript">
-    var second = 0, minute = 60, hour = 0;
 
-    function bak() {
-        if (second != 0) second = second -1 ;
-        else {
-            second = 59;
-            if (minute != 0) minute = minute - 1;
-            else {
-                //SÜRE DOLDU    
-            }
-            
-        }
-        $("#counter").html(hour + " : " + minute + " : " + second);
-    }
-    $(document).ready(function () {
-        $("#counter").html("0 : 60 : 0");
-        setInterval(bak, 1000);
-    });
-</script>
-
-<div class="col-md-2" style="float:right;">
-    <div class="card-counter info">
-        <i class="fa fa-clock-o"></i>
-        <span class="count-numbers" id="counter">60:00</span>
-        <span class="count-name">Kalan Süre</span>
-    </div>
-</div>
 
 
 <div class="container">
 
-    <div class="row mt-5" style="display:block;font-size:1.5em">
-
-        @foreach (var question in Model)
-        {
-            i += 1;
-            var data = question.Picture;
-            if (!String.IsNullOrEmpty(data))
-            {
-                if (question.Picture.Substring(0, 40).Contains(","))
-                {
-                    data = question.Picture.Split(',')[1];
-                }
-            }
-            var imgSrc = String.Format("data:image/gif;base64,{0}", data);
-
-
-            <div class="card mx-1">
-                @if (imgSrc.Length > 22)
-                {
-                    <img src="@imgSrc" class="card-img-top" alt="soru">
-                }
-                <div class="card-body">
-                    <p class="card-title" style="text-align:center;">Soru : @i</p>
-                    <p class="card-text">@question.Title</p>
-                </div>
-                <div class="form-check">
-
-                </div>
-                <div class="form-check">
-
-                </div>
-                <div class="form-check">
-
-                </div>
-
-                <ul class="list-group list-group-flush">
-
-                    <li class="list-group-item mx-2">
-                        <label class="form-check-label" for="radio1">
-                            <input type="radio" class="form-check-input" id="radio1" name="optradio+@i">@question.Answer
-                        </label>
-
-                    </li>
-                    <li class="list-group-item mx-2">
-                        <label class="form-check-label" for="radio2">
-                            <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceOne
-                        </label>
-
-                    </li>
-                    <li class="list-group-item mx-2">
-                        <label class="form-check-label">
-                            <input type="radio" class="form-check-input" name="optradio+@i">@question.ChoiceTwo
-                        </label>
-
-                    </li>
-                    <li class="list-group-item mx-2">
-                        <label class="form-check-label" for="radio2">
-                            <input type="radio" class="form-check-input" id="radio2" name="optradio+@i">@question.ChoiceThree
-                        </label>
-
-                    </li>
-                    <li class="list-group-item">
-                        <button type="submit" class="btn btn-primary">Cevapla</button>
-                    </li>
-
-                </ul>
-
-            </div>
-        }
-
+    <div class="col-md-3" style="float:right;">
+        <div class="card-counter info">
+            <i class="fa fa-clock-o"></i>
+            <span class="count-numbers" id="counter">60:00</span>
+            <span class="count-name">Kalan Süre</span>
+        </div>
     </div>
+    <div class="col-md-8">
+        <div class="row mt-5" style="display:block;font-size:1.5em">
+            @using (Html.BeginForm())
+            {
+                foreach (var question in Model)
+                {
+                    i += 1;
+                    var data = question.Picture;
+                    if (!String.IsNullOrEmpty(data))
+                    {
+                        if (question.Picture.Substring(0, 40).Contains(","))
+                        {
+                            data = question.Picture.Split(',')[1];
+                        }
+                    }
+                    var imgSrc = String.Format("data:image/gif;base64,{0}", data);
+
+
+                    <div class="card mx-1">
+                        @if (imgSrc.Length > 22)
+                        {
+                            <img src="@imgSrc" class="card-img-top" alt="soru">
+                        }
+                        <div class="card-body">
+                            <p class="card-title" style="text-align:center;">Soru : @i</p>
+                            <p class="card-text"><b>@question.Title</b></p>
+                        </div>
+                        <div class="form-check">
+
+                        </div>
+                        <div class="form-check">
+
+                        </div>
+                        <div class="form-check">
+
+                        </div>
+
+                        <ul class="list-group list-group-flush">
+
+                            <li class="list-group-item mx-2">
+                                <label class="form-check-label" for="radio1">
+                                    <input type="radio" class="form-check-input" id="radio1" name="@question.Id">@question.Answer
+                                </label>
+
+                            </li>
+                            <li class="list-group-item mx-2">
+                                <label class="form-check-label" for="radio2">
+                                    <input type="radio" class="form-check-input" id="radio2" name="@question.Id">@question.ChoiceOne
+                                </label>
+
+                            </li>
+                            <li class="list-group-item mx-2">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="@question.Id">@question.ChoiceTwo
+                                </label>
+
+                            </li>
+                            <li class="list-group-item mx-2">
+                                <label class="form-check-label" for="radio2">
+                                    <input type="radio" class="form-check-input" id="radio2" name="@question.Id">@question.ChoiceThree
+                                </label>
+
+                            </li>
+                            <li class="list-group-item mx-2">
+                                <label class="form-check-label" for="radio2">
+                                    <input type="radio" class="form-check-input" id="radio2" name="@question.Id">@question.ChoiceFour
+                                </label>
+
+                            </li>
+
+
+                        </ul>
+
+                    </div>
+                }
+                <button type="submit" class="btn btn-primary">Cevapla</button>
+            }
+
+        </div>
+    </div>
+
 </div>
+

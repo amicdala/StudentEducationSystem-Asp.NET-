@@ -69,6 +69,7 @@ namespace StudentEducationSystem.Controllers
             string choiceOne = form["choiceOne"];
             string choiceTwo = form["choiceTwo"];
             string choiceThree = form["choiceThree"];
+            string choiceFour = form["choiceFour"];
             int teacherId = GetTeacherID();
 
 
@@ -83,6 +84,7 @@ namespace StudentEducationSystem.Controllers
                 ChoiceOne = choiceOne,
                 ChoiceTwo = choiceTwo,
                 ChoiceThree = choiceThree,
+                ChoiceFour = choiceFour,
                 TeacherId = teacherId
             };
             context.Questions.Add(question);

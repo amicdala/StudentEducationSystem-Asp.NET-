@@ -13,6 +13,7 @@ namespace StudentEducationSystem.Models
         public string ChoiceOne { get; set; }
         public string ChoiceTwo { get; set; }
         public string ChoiceThree { get; set; }
+        public string ChoiceFour { get; set; }
         public string Picture { get; set; }
         public int TeacherId { get; set; }
 
