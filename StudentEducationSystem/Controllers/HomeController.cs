@@ -65,38 +65,31 @@ namespace StudentEducationSystem.Controllers
         [AllowAnonymous]
         public bool LoginControl(string Username, string Password, string Role)
         {
-            if (Role == "T")
+            var user = context.Users.FirstOrDefault(x => x.Username == Username && x.Password == Password && x.Role == Role);
+            if (user != null)
             {
-                var teacher = context.Users.FirstOrDefault(x => x.Username == Username && x.Password == Password && x.Role == Role);
-                if (teacher != null)
+                if (Role == "T")
                 {
-                    FormsAuthentication.SetAuthCookie(teacher.Username.ToString(), false);
+                    int teacherID = context.Teachers.FirstOrDefault(x => x.UserId == user.Id).Id;
+
+                    FormsAuthentication.SetAuthCookie(user.Username.ToString(), false);
                     Session["username"] = Username;
+                    Session["TeacherId"] = teacherID;
                     ToastrService.AddToUserQueue(null, "Giriş Başarılı", ToastrType.Success);
                     return true;
                 }
-                else
-                    return false;
-
-            }
-            else if (Role == "S")
-            {
-                var student = context.Users.FirstOrDefault(x => x.Username == Username && x.Password == Password && x.Role == Role);
-                if (student != null)
+                else if(Role =="S")
                 {
-                    FormsAuthentication.SetAuthCookie(student.Username.ToString(), false);
+                    int studentID = context.Students.FirstOrDefault(x => x.UserId == user.Id).Id;
+                    FormsAuthentication.SetAuthCookie(user.Username.ToString(), false);
                     Session["username"] = Username;
+                    Session["StudentId"] = studentID;
                     ToastrService.AddToUserQueue(null, "Giriş Başarılı", ToastrType.Success);
                     return true;
-
                 }
-                else
-                    return false;
             }
-            else
-            {
-                return false;
-            }
+            return false;
+           
 
         }
     }

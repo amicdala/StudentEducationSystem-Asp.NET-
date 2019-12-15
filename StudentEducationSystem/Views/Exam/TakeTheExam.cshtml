@@ -8,9 +8,6 @@
 <link href="~/Content/Counter.css" rel="stylesheet" />
 <script src="~/Scripts/counter.js"></script>
 
-
-
-
 <div class="container">
 
     <div class="col-md-3" style="float:right;">
@@ -24,6 +21,7 @@
         <div class="row mt-5" style="display:block;font-size:1.5em">
             @using (Html.BeginForm())
             {
+                @Html.AntiForgeryToken()
                 foreach (var question in Model)
                 {
                     i += 1;

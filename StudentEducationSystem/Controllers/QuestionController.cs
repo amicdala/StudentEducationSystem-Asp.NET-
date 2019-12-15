@@ -114,10 +114,7 @@ namespace StudentEducationSystem.Controllers
 
         private int GetTeacherID()
         {
-            string userName = Session["UserName"].ToString();
-            int userID = context.Users.FirstOrDefault(x => x.Username == userName).Id;
-            int teacherID = context.Teachers.FirstOrDefault(x => x.UserId == userID).Id;
-            return teacherID;
+            return Convert.ToInt32(Session["TeacherId"]);
         }
     }
 }
