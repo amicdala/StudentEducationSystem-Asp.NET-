@@ -49,13 +49,13 @@ namespace StudentEducationSystem.Models
             
             List<Category> categories = new List<Category>()
             {
-                new Category(){Name = "Üçgenler"},
-                new Category(){Name = "Açılar"},
-                new Category(){Name = "Dörtgenler"},
-                new Category(){Name = "Türev"},
-                new Category(){Name = "Sayılar"},
-                new Category(){Name = "Üslü Sayılar"},
-                new Category(){Name = "Kimya"},
+                new Category(){Name = "Üçgenler",TeacherId =1 },
+                new Category(){Name = "Açılar",TeacherId =1},
+                new Category(){Name = "Dörtgenler",TeacherId =1},
+                new Category(){Name = "Türev",TeacherId =1},
+                new Category(){Name = "Sayılar",TeacherId =1},
+                new Category(){Name = "Üslü Sayılar",TeacherId =1},
+                new Category(){Name = "Kimya",TeacherId =1},
             };
             foreach (var item in categories)
             {

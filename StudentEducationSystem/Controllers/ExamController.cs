@@ -10,21 +10,19 @@ namespace StudentEducationSystem.Controllers
     public class ExamController : Controller
     {
         private EducationSystemContext context = new EducationSystemContext();
-        private static List<int> questionsIdList;
-        private static List<int> questionsCategoryIdList;
+        private static Dictionary<int,int> questionsIdList;
+        
         // GET: Exam
         public ActionResult TakeTheExam()
         {
             int teacherIdForStudent = GetTeacherIDForStudent();
             List<Question> questions = context.Questions.Where(x => x.TeacherId == teacherIdForStudent).ToList();
-            questionsIdList = new List<int>();
-            questionsCategoryIdList = new List<int>(); 
+            questionsIdList = new Dictionary<int, int>();
+            
             foreach (var item in questions)
             {
-                questionsIdList.Add(item.Id);
-
-                if (!questionsCategoryIdList.Contains(item.CategoryId))
-                    questionsCategoryIdList.Add(item.CategoryId);
+                int categoryId = context.Questions.FirstOrDefault(x => x.Id == item.Id).CategoryId;
+                questionsIdList.Add(item.Id,categoryId);
                 
             }
             return View(questions);
@@ -41,20 +39,55 @@ namespace StudentEducationSystem.Controllers
             exam.StudentId = Convert.ToInt32(Session["StudentId"]);
             exam.Date = DateTime.Now;
 
-
+            List<ExamCategory> examCategories = new List<ExamCategory>();
+            
             foreach (var item in questionsIdList)
             {
-                string result = form[item.ToString()].ToString();
-                string dbAnswer = context.Questions.FirstOrDefault(x => x.Id == item).Answer;
+                string result = form[item.Key.ToString()].ToString();
+                string dbAnswer = context.Questions.FirstOrDefault(x => x.Id == item.Key).Answer;
 
-                if (result == dbAnswer)
+                bool control = false;
+                for (int i = 0; i < examCategories.Count; i++)
                 {
-                    trueCounter += 1;
+                    if (examCategories[i].CategoryId == item.Value)
+                    {
+                        control = true;
+                        if (result == dbAnswer)
+                        {
+                            examCategories[i].TrueCounter += 1;
+                            trueCounter += 1;
+                        }
+                        else
+                        {
+                            examCategories[i].FalseCounter += 1;
+                            falseCounter += 1;
+                        }
+                    }
+                    
                 }
-                else
+                if (!control)
                 {
-                    falseCounter += 1;
+                    ExamCategory newExamCategory = new ExamCategory();
+                    newExamCategory.CategoryId = item.Value;
+                    newExamCategory.TrueCounter = 0;
+                    newExamCategory.FalseCounter = 0;
+                    examCategories.Add(newExamCategory);
+
+                    if (result == dbAnswer)
+                    {
+                        newExamCategory.TrueCounter += 1;
+                        trueCounter += 1;
+                    }
+                    else
+                    {
+                        newExamCategory.FalseCounter += 1;
+                        falseCounter += 1;
+                    }
                 }
+                
+
+
+
             }
 
             
@@ -63,6 +96,14 @@ namespace StudentEducationSystem.Controllers
             exam.Point = trueCounter * 2;
 
             context.Exams.Add(exam);
+            context.SaveChanges();
+
+            foreach (var item in examCategories)
+            {
+                int examId = exam.Id;
+                item.ExamId = examId;
+                context.ExamCategories.Add(item);
+            }
             context.SaveChanges();
             return RedirectToAction("Index","Student");
         }
