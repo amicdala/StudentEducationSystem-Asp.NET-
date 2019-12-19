@@ -16,6 +16,7 @@ namespace StudentEducationSystem.Controllers
         public ActionResult TakeTheExam()
         {
             int teacherIdForStudent = GetTeacherIDForStudent();
+
             List<Question> questions = context.Questions.Where(x => x.TeacherId == teacherIdForStudent).ToList();
             questionsIdList = new Dictionary<int, int>();
             
