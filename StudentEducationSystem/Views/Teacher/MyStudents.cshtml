@@ -1,38 +1,50 @@
-﻿
+﻿@model IEnumerable<StudentEducationSystem.Models.User>
 @{
     ViewBag.Title = "MyStudents";
     Layout = "~/Views/Shared/_TeacherLayout.cshtml";
 }
+<script src="~/Scripts/jquery-3.4.1.slim.min.js"></script>
+<link href="~/Design/css/myStudentsStyle.css" rel="stylesheet" />
+<script src="~/Design/js/studentSearchJS.js"></script>
 
-    <h2>Öğrencilerim</h2>
 
-    <table class="table table" >
-        <thead class="thead-light">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>amdo</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>afat</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>atwitter</td>
-            </tr>
-        </tbody>
-    </table>
+
+<div class="container">
+
+    <div class="search-box">
+        <h2 class="text-center text-white">Öğrencilerim</h2>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                <h5 class="text-white">Öğrenci Ara : </h5>
+            </div>
+            <div class="col-md-9">
+                <input type="text" id="search" onkeyup="myFunction()" class="form-control" placeholder="Öğrenci Ara...">
+
+            </div>
+        </div>
+    </div>
+    <div class="search-list">
+
+        <table class="table" id="myTable">
+            <thead>
+                <tr>
+                    <th>İsim</th>
+                    <th>Soyisim</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Surname</td>
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+
+    </div>
+</div>

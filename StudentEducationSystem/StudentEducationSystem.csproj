@@ -165,11 +165,13 @@
     <Content Include="Content\toastr.min.css" />
     <Content Include="Design\css\form.css" />
     <Content Include="Design\css\loginForm.css" />
+    <Content Include="Design\css\myStudentsStyle.css" />
     <Content Include="Design\css\teacherCard.css" />
     <Content Include="Design\css\teacherLayout.css" />
     <Content Include="Design\images\icon.jpg" />
     <Content Include="Design\images\question.jpg" />
     <Content Include="Design\images\student.png" />
+    <Content Include="Design\js\studentSearchJS.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />

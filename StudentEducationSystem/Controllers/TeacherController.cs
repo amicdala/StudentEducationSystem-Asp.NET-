@@ -24,11 +24,23 @@ namespace StudentEducationSystem.Controllers
 
         public ActionResult MyStudents()
         {
+            int teacherID = GetTeacherID();
+            List<Student> students = context.Students.Where(x => x.TeacherId == teacherID).ToList();
+            List<User> users = new List<User>();
+            foreach (Student item in students)
+            {
+                users.Add(context.Users.FirstOrDefault(x => x.Id == item.UserId));
+            }
             
-            return View();
+            return View(users);
         }
 
-        
+        private int GetTeacherID()
+        {
+            return Convert.ToInt32(Session["TeacherId"]);
+        }
+
+
 
     }
 }
