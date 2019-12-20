@@ -2,18 +2,47 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_TeacherLayout.cshtml";
 }
-<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-<link href="~/Content/toastr.min.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+<link href="~/Design/css/teacherCard.css" rel="stylesheet" />
+
+
 <div class="container">
+    <h3 class="pb-3 mb-4 font-italic border-bottom">
+        Öğretmen Sayfası
+    </h3>
 
     <div class="row">
-        <h2 class="cover-heading">Hoşgeldiniz Öğretmenimiz : @HttpContext.Current.User.Identity.Name</h2>
-        <p class="lead mt-3">Öğrencilerinizi takip edebileceğiniz onlara soru ekleyebileceğiniz bir sistem. Öğrencilerinizin takibini yapabilir, listesini görebilirsiniz. </p>
-        <p class="lead">
-            <a href="/Teacher/AddQuestion" class="btn btn-lg btn-secondary">Soru Ekle</a>
-        </p>
+        <div class="col-md-6">
+            <div class="card border-primary flex-md-row mb-4 shadow-sm h-md-250">
+                <div class="card-body d-flex flex-column align-items-start">
+                    <strong class="d-inline-block mb-2 text-primary">Sorular</strong>
+                    <h6 class="mb-0">
+                        <a class="text-dark" href="#">Öğrencilerinize Soru Sorabilirsiniz</a>
+                    </h6>
+                    <br />
+                    <p class="card-text mb-auto">Eklediğiniz her soru öğrencinin konuya bağlı bilgi düzeyine göre karşısına çıkacak ve test olacaktır.</p>
+                    <a class="btn btn-outline-primary btn-sm" role="button" href="/Question/Index">Sorularımı Görüntüle</a>
+                </div>
+                <img class="card-img-right flex-auto d-none d-lg-block" alt="Thumbnail [200x250]" src="~/Design/images/question.jpg" style="width: 200px; height: 250px;">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-success flex-md-row mb-4 shadow-sm h-md-250">
+                <div class="card-body d-flex flex-column align-items-start">
+                    <strong class="d-inline-block mb-2 text-success">Öğrenciler</strong>
+                    <h6 class="mb-0">
+                        <a class="text-dark" href="#">Öğrencilerinizi Görüntüleyebilirsiniz</a>
+                    </h6>
+                    <br />
+                    <p class="card-text mb-auto">Öğrencileriniz size özel kayıt olan öğrencilerinizden oluşmaktadır.</p>
+                    <a class="btn btn-outline-success btn-sm" href="/Teacher/MyStudents">Öğrencilerimi Görüntüle</a>
+                </div>
+                <img class="card-img-right flex-auto d-none d-lg-block" alt="Thumbnail [200x250]" src="~/Design/images/student.png" style="width: 200px; height: 250px;">
+            </div>
+        </div>
     </div>
 </div>
+
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <script src="~/Scripts/bootstrap.min.js"></script>
 <script src="~/Scripts/toastr.min.js"></script>

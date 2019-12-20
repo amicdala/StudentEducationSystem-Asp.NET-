@@ -5,14 +5,18 @@
 <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
 <link href="~/Content/toastr.min.css" rel="stylesheet" />
 <link href="~/Design/css/loginForm.css" rel="stylesheet" />
+<link href="~/Design/css/form.css" rel="stylesheet" />
+
+
 <!------ Include the above in your HEAD tag ---------->
 
 <div class="sidenav">
-    <div class="login-main-text">
-        <img src="~/Design/images/logo.png" width="450" height="147" />
-        <h2 style="text-align:center;">Giriş Sayfası</h2>
+        <img class="rounded mx-auto d-block" src="~/Design/images/student.png" height="250" style="color:blue"/>
+        <br />
+        <h1 class="text-center text-white">BİZİM EĞİTİM</h1>
+        <h2 class="text-center text-white">Giriş Sayfası</h2>
 
-    </div>
+    
 
 </div>
 <div class="main">
@@ -23,25 +27,28 @@
                 @Html.AntiForgeryToken()
                 <div class="input-group mb-4">
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-outline-dark active">
+                        <label class="btn btn-outline-primary  active">
                             <input type="radio" name="role" id="option1" value="S" autocomplete="off" checked> Öğrenci
                         </label>
-                        <label class="btn btn-outline-dark  ">
+                        <label class="btn btn-outline-primary  ">
                             <input type="radio" name="role" id="option2" value="T" autocomplete="off"> Öğretmen
                         </label>
 
                     </div>
 
                 </div>
-                <div class="form-group">
-                    <label>Kullanıcı Adı</label>
-                    <input type="text" class="form-control" placeholder="Kullanıcı Adı" name="username" required>
+                <div class="form-label-group">
+                    <input  id="username" class="form-control" placeholder="Kullanıcı Adı..." name="username" required autofocus>
+                    <label for="username">Kullanıcı Adı</label>
                 </div>
-                <div class="form-group">
-                    <label>Şifre</label>
-                    <input type="password" class="form-control" placeholder="Şifre" name="password" required>
+
+                <div class="form-label-group">
+                    <input  type="password" id="password" class="form-control" placeholder="Şifre..." name="password" required />
+                    <label for="password">Şifre</label>
                 </div>
-                <button type="submit" class="btn btn-black">Login</button>
+                <br />
+                <button class="btn btn-primary btn-block" type="submit">Giriş</button>
+                
 
             }
         </div>
