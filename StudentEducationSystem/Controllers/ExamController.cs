@@ -15,18 +15,46 @@ namespace StudentEducationSystem.Controllers
         // GET: Exam
         public ActionResult TakeTheExam()
         {
-            int teacherIdForStudent = GetTeacherIDForStudent();
-
-            List<Question> questions = context.Questions.Where(x => x.TeacherId == teacherIdForStudent).ToList();
-            questionsIdList = new Dictionary<int, int>();
-            
-            foreach (var item in questions)
+            int studentId = GetStundetId();
+            List<Exam> exams = context.Exams.Where(x => x.StudentId == studentId).ToList();
+            if (exams.Count > 0)
             {
-                int categoryId = context.Questions.FirstOrDefault(x => x.Id == item.Id).CategoryId;
-                questionsIdList.Add(item.Id,categoryId);
-                
+                DateTime lastDate = exams.OrderByDescending(y => y.Date).ToList()[0].Date;
+                if (lastDate.Day - DateTime.Now.Day >1 )
+                {
+                    int teacherIdForStudent = GetTeacherIDForStudent();
+
+                    List<Question> questions = context.Questions.Where(x => x.TeacherId == teacherIdForStudent).ToList();
+                    questionsIdList = new Dictionary<int, int>();
+
+                    foreach (var item in questions)
+                    {
+                        int categoryId = context.Questions.FirstOrDefault(x => x.Id == item.Id).CategoryId;
+                        questionsIdList.Add(item.Id, categoryId);
+
+                    }
+                    return View(questions);
+                }
             }
-            return View(questions);
+            else
+            {
+                int teacherIdForStudent = GetTeacherIDForStudent();
+
+                List<Question> questions = context.Questions.Where(x => x.TeacherId == teacherIdForStudent).ToList();
+                questionsIdList = new Dictionary<int, int>();
+
+                foreach (var item in questions)
+                {
+                    int categoryId = context.Questions.FirstOrDefault(x => x.Id == item.Id).CategoryId;
+                    questionsIdList.Add(item.Id, categoryId);
+
+                }
+                return View(questions);
+            }
+            ToastrService.AddToUserQueue("En son yaptığınız sınavın üzerinden en az 1 gün geçmeli.", "Sınav Olamazsınız", ToastrType.Info);
+            return RedirectToAction("Index", "Student");
+            
+           
         }
 
         [HttpPost]
@@ -44,6 +72,9 @@ namespace StudentEducationSystem.Controllers
             
             foreach (var item in questionsIdList)
             {
+                if (form[item.Key.ToString()] == null)
+                    continue;
+                
                 string result = form[item.Key.ToString()].ToString();
                 string dbAnswer = context.Questions.FirstOrDefault(x => x.Id == item.Key).Answer;
 
@@ -109,6 +140,10 @@ namespace StudentEducationSystem.Controllers
             return RedirectToAction("Index","Student");
         }
 
+        private int GetStundetId()
+        {
+            return Convert.ToInt32(Session["StudentId"]);
+        }
         private int GetTeacherIDForStudent()
         {
             int studentId = Convert.ToInt32(Session["StudentId"]);
