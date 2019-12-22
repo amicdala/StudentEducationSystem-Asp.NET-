@@ -8,18 +8,22 @@
 <link href="~/Content/Counter.css" rel="stylesheet" />
 <script src="~/Scripts/counter.js"></script>
 
+
+
 <div class="container">
 
-    <div class="col-md-3" style="float:right;">
+    <div class="col-md-3 fixed" style="float:right;">
         <div class="card-counter info">
             <i class="fa fa-clock-o"></i>
             <span class="count-numbers" id="counter">60:00</span>
             <span class="count-name">Kalan Süre</span>
         </div>
     </div>
-    <div class="col-md-8">
-        <div class="row mt-5" style="display:block;font-size:1.5em">
-            @using (Html.BeginForm("TakeTheExam","Exam",FormMethod.Post))
+    <div class="col-md-10">
+        <div class="row mt-5" style="        display: block;
+        font-size: 1.5em
+">
+            @using (Html.BeginForm("TakeTheExam", "Exam", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
                 foreach (var question in Model)
@@ -92,6 +96,7 @@
                         </ul>
 
                     </div>
+                    <br />
                 }
                 <button type="submit" class="btn btn-primary">Cevapla</button>
             }
