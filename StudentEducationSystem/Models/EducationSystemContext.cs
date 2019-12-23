@@ -23,6 +23,8 @@ namespace StudentEducationSystem.Models
         public DbSet<Exam> Exams { get; set; }
         public DbSet<ExamCategory> ExamCategories { get; set; }
 
+        public DbSet<PerformanceCategory> PerformanceCategories { get; set; }
+
 
     }
 }   

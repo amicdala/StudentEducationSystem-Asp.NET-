@@ -141,6 +141,7 @@
     <Compile Include="Models\EducationSystemInitializer.cs" />
     <Compile Include="Models\Exam.cs" />
     <Compile Include="Models\ExamCategory.cs" />
+    <Compile Include="Models\PerformanceCategory.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\Student.cs" />
     <Compile Include="Models\Teacher.cs" />
