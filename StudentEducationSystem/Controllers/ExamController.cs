@@ -20,12 +20,16 @@ namespace StudentEducationSystem.Controllers
             if (exams.Count > 0)
             {
                 DateTime lastDate = exams.OrderByDescending(y => y.Date).ToList()[0].Date;
-                if (lastDate.Day - DateTime.Now.Day >1 )
+                if (!IsToday(lastDate))
                 {
                     int teacherIdForStudent = GetTeacherIDForStudent();
 
                     List<Question> questions = context.Questions.Where(x => x.TeacherId == teacherIdForStudent).ToList();
                     questionsIdList = new Dictionary<int, int>();
+
+                    int totalCategory = context.Categories.Count(x => x.TeacherId == teacherIdForStudent);
+
+                    int[] questionNumber = GetQuestionNumber(totalCategory);
 
                     foreach (var item in questions)
                     {
@@ -33,6 +37,7 @@ namespace StudentEducationSystem.Controllers
                         questionsIdList.Add(item.Id, categoryId);
 
                     }
+
                     return View(questions);
                 }
             }
@@ -77,7 +82,7 @@ namespace StudentEducationSystem.Controllers
                 
                 string result = form[item.Key.ToString()].ToString();
                 string dbAnswer = context.Questions.FirstOrDefault(x => x.Id == item.Key).Answer;
-
+                
                 bool control = false;
                 for (int i = 0; i < examCategories.Count; i++)
                 {
@@ -149,6 +154,55 @@ namespace StudentEducationSystem.Controllers
             int studentId = Convert.ToInt32(Session["StudentId"]);
             int teacherID = context.Students.FirstOrDefault(x => x.Id == studentId).TeacherId;
             return teacherID;
+        }
+
+        private bool IsToday(DateTime date)
+        {
+            return date.Day == DateTime.Now.Day && date.Month == DateTime.Now.Month && date.Year == DateTime.Now.Year;
+        }
+
+        private int[] GetQuestionNumber(int categoryLength)
+        {
+            int avg = 50 / categoryLength;
+            int kalan = 50 - categoryLength * avg;
+            int[] arr = new int[categoryLength];
+
+            for (int i = 0; i < categoryLength; i++)
+                arr[i] = avg;
+
+            for (int i = 0; i < categoryLength - 1; i++)
+            {
+                int eklenecek = 0;
+                for (int j = i + 1; j < categoryLength; j++)
+                {
+                    arr[j] = arr[j] - 1;
+                    eklenecek++;
+                }
+                arr[i] += eklenecek;
+            }
+
+            arr[0] += kalan;
+
+            int lastValue = arr[categoryLength - 1];
+
+            if (lastValue < 0)
+            {
+                int mutlak = lastValue * -1;
+
+                for (int i = 0; i < categoryLength; i++)
+                {
+                    if (arr[i] == mutlak)
+                    {
+                        for (int j = i; j < categoryLength; j++)
+                        {
+                            arr[j] = 0;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            return arr;
         }
     }
 }
