@@ -9,9 +9,9 @@ namespace StudentEducationSystem.Controllers
 {
     public class ExamController : Controller
     {
-        private EducationSystemContext context = new EducationSystemContext();
-        private static Dictionary<int,int> questionsIdList;
-        
+        private readonly EducationSystemContext context = new EducationSystemContext();
+        private static Dictionary<int, int> questionsIdList;
+
         // GET: Exam
         public ActionResult TakeTheExam()
         {
@@ -24,23 +24,44 @@ namespace StudentEducationSystem.Controllers
                 {
                     int teacherIdForStudent = GetTeacherIDForStudent();
 
-                    List<Question> questions = context.Questions.Where(x => x.TeacherId == teacherIdForStudent).ToList();
                     questionsIdList = new Dictionary<int, int>();
 
                     int totalCategory = context.Categories.Count(x => x.TeacherId == teacherIdForStudent);
 
-                    int[] questionNumber = GetQuestionNumber(totalCategory);
+                    List<PerformanceCategory> performance =
+                        context.PerformanceCategories.Where(x => x.StudentID == studentId).ToList();
 
-                    foreach (var item in questions)
+                    int[] categoryIds = GetCategoryIdsForExam(performance);
+
+                    int[] countOfQuestion = GetQuestionNumber(totalCategory);
+
+                    List<Question> questions = new List<Question>();
+
+                    for (int i = 0; i < categoryIds.Length; i++)
                     {
-                        int categoryId = context.Questions.FirstOrDefault(x => x.Id == item.Id).CategoryId;
-                        questionsIdList.Add(item.Id, categoryId);
+                        int categoryId = categoryIds[i];
+                        int count = countOfQuestion[i];
 
+                        questions.AddRange(context.Questions
+                            .Where(x => x.TeacherId == teacherIdForStudent && x.CategoryId == categoryId)
+                            .Take(count).ToList());
+                    }
+
+                    int countOfQue = 0;
+                    for(int i = 0; i < categoryIds.Length; i++)
+                    {
+                        for (int j = countOfQue; j < countOfQuestion[i]; j++)
+                        {
+                            questionsIdList.Add(questions[j].Id, categoryIds[i]);
+                        }
+
+                        countOfQue = countOfQuestion[i];
                     }
 
                     return View(questions);
                 }
             }
+
             else
             {
                 int teacherIdForStudent = GetTeacherIDForStudent();
@@ -58,8 +79,6 @@ namespace StudentEducationSystem.Controllers
             }
             ToastrService.AddToUserQueue("En son yaptığınız sınavın üzerinden en az 1 gün geçmeli.", "Sınav Olamazsınız", ToastrType.Info);
             return RedirectToAction("Index", "Student");
-            
-           
         }
 
         [HttpPost]
@@ -74,15 +93,15 @@ namespace StudentEducationSystem.Controllers
             exam.Date = DateTime.Now;
 
             List<ExamCategory> examCategories = new List<ExamCategory>();
-            
+
             foreach (var item in questionsIdList)
             {
                 if (form[item.Key.ToString()] == null)
                     continue;
-                
+
                 string result = form[item.Key.ToString()].ToString();
                 string dbAnswer = context.Questions.FirstOrDefault(x => x.Id == item.Key).Answer;
-                
+
                 bool control = false;
                 for (int i = 0; i < examCategories.Count; i++)
                 {
@@ -100,7 +119,7 @@ namespace StudentEducationSystem.Controllers
                             falseCounter += 1;
                         }
                     }
-                    
+
                 }
                 if (!control)
                 {
@@ -121,13 +140,8 @@ namespace StudentEducationSystem.Controllers
                         falseCounter += 1;
                     }
                 }
-                
-
-
-
             }
 
-            
             exam.TrueCounter = trueCounter;
             exam.FalseCounter = falseCounter;
             exam.Point = trueCounter * 2;
@@ -142,7 +156,7 @@ namespace StudentEducationSystem.Controllers
                 context.ExamCategories.Add(item);
             }
             context.SaveChanges();
-            return RedirectToAction("Index","Student");
+            return RedirectToAction("Index", "Student");
         }
 
         private int GetStundetId()
@@ -165,44 +179,75 @@ namespace StudentEducationSystem.Controllers
         {
             int avg = 50 / categoryLength;
             int kalan = 50 - categoryLength * avg;
-            int[] arr = new int[categoryLength];
+            int[] questionNumbers = new int[categoryLength];
 
             for (int i = 0; i < categoryLength; i++)
-                arr[i] = avg;
+                questionNumbers[i] = avg;
 
             for (int i = 0; i < categoryLength - 1; i++)
             {
-                int eklenecek = 0;
+                int additive = 0;
                 for (int j = i + 1; j < categoryLength; j++)
                 {
-                    arr[j] = arr[j] - 1;
-                    eklenecek++;
+                    questionNumbers[j] = questionNumbers[j] - 1;
+                    additive++;
                 }
-                arr[i] += eklenecek;
+                questionNumbers[i] += additive;
             }
 
-            arr[0] += kalan;
+            questionNumbers[0] += kalan;
 
-            int lastValue = arr[categoryLength - 1];
+            int lastValue = questionNumbers[categoryLength - 1];
 
             if (lastValue < 0)
             {
-                int mutlak = lastValue * -1;
+                int lastValueAbsolute = lastValue * -1;
 
                 for (int i = 0; i < categoryLength; i++)
                 {
-                    if (arr[i] == mutlak)
+                    if (questionNumbers[i] == lastValueAbsolute)
                     {
                         for (int j = i; j < categoryLength; j++)
                         {
-                            arr[j] = 0;
+                            questionNumbers[j] = 0;
                         }
                         break;
                     }
                 }
             }
 
-            return arr;
+            return questionNumbers;
+        }
+
+        private int[] GetCategoryIdsForExam(List<PerformanceCategory> performanceCategoryList)
+        {
+            int[] categoryIds = new int[performanceCategoryList.Count];
+            double[] performance = new double[performanceCategoryList.Count];
+
+            int i = 0;
+            foreach (var category in performanceCategoryList)
+            {
+                double rate = category.TrueCounter / Convert.ToDouble(category.FalseCounter);
+                performance[i] = rate;
+                categoryIds[i] = category.Id;
+                i++;
+            }
+
+            int n = performance.Length;
+            for (i = 0; i < n - 1; i++)
+                for (int j = 0; j < n - i - 1; j++)
+                    if (performance[j] > performance[j + 1])
+                    {
+                        double temp = performance[j];
+                        performance[j] = performance[j + 1];
+                        performance[j + 1] = temp;
+                        int temp2 = categoryIds[j];
+                        categoryIds[j] = categoryIds[j + 1];
+                        categoryIds[j + 1] = temp2;
+
+                    }
+
+            return categoryIds;
         }
     }
 }
