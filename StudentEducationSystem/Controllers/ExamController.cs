@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 
 namespace StudentEducationSystem.Controllers
 {
@@ -48,7 +49,7 @@ namespace StudentEducationSystem.Controllers
                     }
 
                     int countOfQue = 0;
-                    for(int i = 0; i < categoryIds.Length; i++)
+                    for (int i = 0; i < categoryIds.Length; i++)
                     {
                         for (int j = countOfQue; j < countOfQuestion[i]; j++)
                         {
@@ -66,7 +67,36 @@ namespace StudentEducationSystem.Controllers
             {
                 int teacherIdForStudent = GetTeacherIDForStudent();
 
-                List<Question> questions = context.Questions.Where(x => x.TeacherId == teacherIdForStudent).ToList();
+                List<Question> questions = new List<Question>();
+                Random rand = new Random();
+                for (int i = 0; i < 50; i++)
+                {
+                    var skip = (int)(rand.NextDouble() * context.Questions.Count());
+
+                    Question question = context.Questions.OrderBy(x => x.TeacherId == teacherIdForStudent).Skip(skip).FirstOrDefault();
+
+                    bool isSameQuestion = false;
+
+                    foreach (var item in questions)
+                    {
+                        if (question != null && item.Id.Equals(question.Id))
+                        {
+                            isSameQuestion = true;
+                            break;
+                        } 
+                    }
+
+                    if (!isSameQuestion)
+                    {
+                        questions.Add(question);
+                    }
+                    else
+                    {
+                        i--;
+                        continue;
+                    }
+                }
+
                 questionsIdList = new Dictionary<int, int>();
 
                 foreach (var item in questions)
@@ -99,7 +129,7 @@ namespace StudentEducationSystem.Controllers
                 if (form[item.Key.ToString()] == null)
                     continue;
 
-                string result = form[item.Key.ToString()].ToString();
+                string result = form[item.Key.ToString()];
                 string dbAnswer = context.Questions.FirstOrDefault(x => x.Id == item.Key).Answer;
 
                 bool control = false;
@@ -227,7 +257,12 @@ namespace StudentEducationSystem.Controllers
             int i = 0;
             foreach (var category in performanceCategoryList)
             {
-                double rate = category.TrueCounter / Convert.ToDouble(category.FalseCounter);
+                double rate;
+                if (category.FalseCounter != 0)
+                    rate = category.TrueCounter / Convert.ToDouble(category.FalseCounter);
+                else
+                    rate = category.TrueCounter;
+
                 performance[i] = rate;
                 categoryIds[i] = category.Id;
                 i++;
