@@ -4,14 +4,14 @@
     Layout = "~/Views/Shared/_StudentLayout.cshtml";
 }
 
-                <section class="jumbotron text-center">
-                    <div class="container">
-                        <h1 class="jumbotron-heading">Sanal Eğitim Sistemi</h1>
-                        <p class="lead text-muted">Öğrenme düzeynizi ver veriminizi artırabileceğiniz istatiklerinizi görebileceğiniz siteme hoşgeldin : <b> @HttpContext.Current.User.Identity.Name</b></p>
-                        <p>
-                            <a href="/Exam/TakeTheExam" class="btn btn-primary my-2">Sınav Ol</a>
-                            <a href="/Statistic/Index" class="btn btn-secondary my-2">İstatikleri Görüntüle</a>
-                        </p>
-                    </div>
-                </section>
+<section class="jumbotron text-center">
+    <div class="container">
+        <h1 class="jumbotron-heading">Sanal Eğitim Sistemi</h1>
+        <p class="lead text-muted">Öğrenme düzeyinizi ve veriminizi artırabileceğiniz, istatiklerinizi görebileceğiniz sisteme hoşgeldiniz <b> @HttpContext.Current.User.Identity.Name!</b></p>
+        <p>
+            <a href="/Exam/TakeTheExam" class="btn btn-primary my-2">Sınav Ol</a>
+            <a href="/Statistic/Index" class="btn btn-secondary my-2">İstatikleri Görüntüle</a>
+        </p>
+    </div>
+</section>
 
