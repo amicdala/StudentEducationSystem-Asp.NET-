@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 
@@ -10,111 +9,48 @@ namespace StudentEducationSystem.Controllers
 {
     public class ExamController : Controller
     {
-        private readonly EducationSystemContext context = new EducationSystemContext();
-        private static Dictionary<int, int> questionsIdList;
+        private readonly EducationSystemContext _context = new EducationSystemContext();
+        private static Dictionary<int, int> _questionsIdList;
 
         // GET: Exam
         public ActionResult TakeTheExam()
         {
             int studentId = GetStundetId();
-            List<Exam> exams = context.Exams.Where(x => x.StudentId == studentId).ToList();
+            List<Exam> exams = GetExamsWithStudentId(studentId);
+
             if (exams.Count > 0)
             {
                 DateTime lastDate = exams.OrderByDescending(y => y.Date).ToList()[0].Date;
+
                 if (!IsToday(lastDate))
                 {
                     int teacherIdForStudent = GetTeacherIDForStudent();
 
-                    questionsIdList = new Dictionary<int, int>();
+                    int totalCategory = _context.Categories.Count(x => x.TeacherId == teacherIdForStudent);
 
-                    int totalCategory = context.Categories.Count(x => x.TeacherId == teacherIdForStudent);
+                    List<PerformanceCategory> performance = GetPerformanceCategoriesForStudent(studentId);
+                    
+                    int[] categoryIds = GetAscendingRateCategoryIdsForExam(performance);
 
-                    List<PerformanceCategory> performance =
-                        context.PerformanceCategories.Where(x => x.StudentID == studentId).ToList();
+                    int[] countOfQuestion = GetDescendingCountOfQuestions(totalCategory);
 
-                    int[] categoryIds = GetCategoryIdsForExam(performance);
+                    List<Question> questions =
+                        GetFiftyQuestionsWithTeacherIdAndCategoryId(teacherIdForStudent, categoryIds, countOfQuestion);
 
-                    int[] countOfQuestion = GetQuestionNumber(totalCategory);
+                    MatchQuestionsToCategoryId(questions, categoryIds, countOfQuestion, false);
 
-                    List<Question> questions = new List<Question>();
-
-                    for (int i = 0; i < categoryIds.Length; i++)
-                    {
-                        int categoryId = categoryIds[i];
-                        int count = countOfQuestion[i];
-
-                        questions.AddRange(context.Questions
-                            .Where(x => x.TeacherId == teacherIdForStudent && x.CategoryId == categoryId)
-                            .Take(count).ToList());
-                    }
-
-                    int countOfQue = 0;
-                    for (int i = 0; i < categoryIds.Length; i++)
-                    {
-                        for (int j = countOfQue; j < countOfQuestion[i]; j++)
-                        {
-                            questionsIdList.Add(questions[j].Id, categoryIds[i]);
-                        }
-
-                        countOfQue = countOfQuestion[i];
-                    }
-
-                    Random rand = new Random();
-                    int n = questions.Count;
-                    while (n > 1)
-                    {
-                        n--;
-                        int k = rand.Next(n + 1);
-                        var value = questions[k];
-                        questions[k] = questions[n];
-                        questions[n] = value;
-                    }
+                    ShuffleList(questions);
 
                     return View(questions);
                 }
             }
             else
-
             {
                 int teacherIdForStudent = GetTeacherIDForStudent();
 
-                List<Question> questions = new List<Question>();
-                Random rand = new Random();
-                for (int i = 0; i < 50; i++)
-                {
-                    var skip = (int)(rand.NextDouble() * context.Questions.Count());
+                List<Question> questions = GetFiftyRandomQuestionWithTeacherId(teacherIdForStudent);
 
-                    Question question = context.Questions.OrderBy(x => x.TeacherId == teacherIdForStudent).Skip(skip).FirstOrDefault();
-
-                    bool isSameQuestion = false;
-
-                    foreach (var item in questions)
-                    {
-                        if (question != null && item.Id.Equals(question.Id))
-                        {
-                            isSameQuestion = true;
-                            break;
-                        }
-                    }
-
-                    if (!isSameQuestion)
-                    {
-                        questions.Add(question);
-                    }
-                    else
-                    {
-                        i--;
-                        continue;
-                    }
-                }
-
-                questionsIdList = new Dictionary<int, int>();
-
-                foreach (var item in questions)
-                {
-                    int categoryId = context.Questions.FirstOrDefault(x => x.Id == item.Id).CategoryId;
-                    questionsIdList.Add(item.Id, categoryId);
-                }
+                MatchQuestionsToCategoryId(questions, null, null, true);
 
                 return View(questions);
             }
@@ -129,22 +65,22 @@ namespace StudentEducationSystem.Controllers
             int trueCounter = 0;
             int falseCounter = 0;
 
-            var exam = new Exam { StudentId = Convert.ToInt32(Session["StudentId"]), Date = DateTime.Now };
+            Exam exam = new Exam { StudentId = Convert.ToInt32(Session["StudentId"]), Date = DateTime.Now };
 
-            var examCategories = new List<ExamCategory>();
+            List<ExamCategory> examCategories = new List<ExamCategory>();
 
-            foreach (var item in questionsIdList)
+            foreach (var item in _questionsIdList)
             {
                 if (form[item.Key.ToString()] == null)
                     continue;
 
-                var result = form[item.Key.ToString()];
-                var dbAnswer = context.Questions.FirstOrDefault(x => x.Id == item.Key).Answer;
+                string result = form[item.Key.ToString()];
+                string dbAnswer = GetRightAnswer(item.Key);
 
-                var control = false;
-                foreach (var examCategory in examCategories.Where(examCategory => examCategory.CategoryId == item.Value))
+                bool isNewCategory = true;
+                foreach (ExamCategory examCategory in examCategories.Where(examCategory => examCategory.CategoryId == item.Value))
                 {
-                    control = true;
+                    isNewCategory = false;
                     if (result == dbAnswer)
                     {
                         examCategory.TrueCounter += 1;
@@ -157,9 +93,9 @@ namespace StudentEducationSystem.Controllers
                     }
                 }
 
-                if (control) continue;
+                if (!isNewCategory) continue;
 
-                var newExamCategory = new ExamCategory { CategoryId = item.Value, TrueCounter = 0, FalseCounter = 0 };
+                ExamCategory newExamCategory = new ExamCategory { CategoryId = item.Value, TrueCounter = 0, FalseCounter = 0 };
 
                 examCategories.Add(newExamCategory);
 
@@ -179,31 +115,25 @@ namespace StudentEducationSystem.Controllers
             exam.FalseCounter = falseCounter;
             exam.Point = trueCounter * 2;
 
-            context.Exams.Add(exam);
+            _context.Exams.Add(exam);
+            _context.SaveChanges();
 
             foreach (var examCategory in examCategories)
             {
-                int examId = exam.Id;
+                int examId = exam.Id;         
                 examCategory.ExamId = examId;
-                context.ExamCategories.Add(examCategory);
+                _context.ExamCategories.Add(examCategory);
             }
 
-            var performanceCategories = new List<PerformanceCategory>();
+            List<PerformanceCategory> performanceCategories = new List<PerformanceCategory>();
 
             foreach (var examCategory in examCategories)
             {
-                var isSameCategory = false;
+                bool isExist = IsCategoryInList(performanceCategories, examCategory);
 
-                foreach (var performanceCategory in performanceCategories.Where(performanceCategory => examCategory.CategoryId == performanceCategory.CategoryId))
-                {
-                    performanceCategory.TrueCounter += examCategory.TrueCounter;
-                    performanceCategory.FalseCounter += examCategory.FalseCounter;
-                    isSameCategory = true;
-                }
+                if (isExist) continue;
 
-                if (isSameCategory) continue;
-
-                var newPerformanceCategory = new PerformanceCategory
+                PerformanceCategory newPerformanceCategory = new PerformanceCategory
                 {
                     CategoryId = examCategory.CategoryId,
                     TrueCounter = examCategory.TrueCounter,
@@ -214,23 +144,84 @@ namespace StudentEducationSystem.Controllers
                 performanceCategories.Add(newPerformanceCategory);
             }
 
-            foreach (var performanceCategory in performanceCategories)
+            foreach (PerformanceCategory performanceCategory in performanceCategories)
             {
-                var performCategories = context.PerformanceCategories.Where(x => x.StudentID == performanceCategory.StudentID && x.CategoryId == performanceCategory.CategoryId).ToList();
 
-                if (performCategories.Count > 0)
+                PerformanceCategory performCategory =
+                    GetPerformanceWithCategoryId(GetStundetId(), performanceCategory.CategoryId);
+
+                if (performCategory != null)
                 {
-                    performCategories[0].TrueCounter += performanceCategory.TrueCounter;
-                    performCategories[0].FalseCounter += performanceCategory.FalseCounter;
+                    performCategory.TrueCounter += performanceCategory.TrueCounter;
+                    performCategory.FalseCounter += performanceCategory.FalseCounter;
                 }
                 else
                 {
-                    context.PerformanceCategories.Add(performanceCategory);
+                    AddPerformanceCategory(performCategory);
                 }
             }
 
-            context.SaveChanges();
+            _context.SaveChanges();
+
+            List<Category> categories = GetTeacherCategories(GetTeacherIDForStudent());
+
+            List<PerformanceCategory> existPerformanceCategories = GetPerformanceCategoriesForStudent(GetStundetId());
+
+            foreach (var category in categories)
+            {
+                bool isExist = false;
+                foreach (var performanceCategory in existPerformanceCategories)
+                {
+                    if (category.Id == performanceCategory.CategoryId)
+                    {
+                        isExist = true;
+                        break;
+                    }
+                }
+
+                if (isExist) continue;
+
+                var newPerformanceCategory = new PerformanceCategory
+                {
+                    CategoryId = category.Id,
+                    TrueCounter = 0,
+                    FalseCounter = 0,
+                    StudentID = GetStundetId()
+                };
+
+                AddPerformanceCategory(newPerformanceCategory);
+            }
+            
+            _context.SaveChanges();
             return RedirectToAction("Index", "Student");
+        }
+
+        private List<Category> GetTeacherCategories(int teacherId)
+        {
+            return _context.Categories.Where(x => x.TeacherId == teacherId).ToList();
+        }
+
+        private void AddPerformanceCategory(PerformanceCategory performCategory)
+        {
+            _context.PerformanceCategories.Add(performCategory);
+        }
+
+        private PerformanceCategory GetPerformanceWithCategoryId(int studentId, int categoryId)  // Parametre olarak gelen studentId'ye ve categoryId'ye sahip performance category i dondurur.
+        {
+            return _context.PerformanceCategories.FirstOrDefault(x => x.StudentID == studentId && x.CategoryId == categoryId);
+        }
+
+        private bool IsCategoryInList(List<PerformanceCategory> performanceCategories, ExamCategory examCategory)  // Parametre olarak gelen examCategory, performanceCategories listesinde var mı yok mu kontrol eder. Eger varsa bu examCategory nin dogru ve yanlislari, performanceCategorieste var olanin ustune yazdirilir.
+        {
+            bool isSameCategory = false;
+            foreach (var performanceCategory in performanceCategories.Where(performanceCategory => examCategory.CategoryId == performanceCategory.CategoryId))
+            {
+                performanceCategory.TrueCounter += examCategory.TrueCounter;
+                performanceCategory.FalseCounter += examCategory.FalseCounter;
+                isSameCategory = true;
+            }
+
+            return isSameCategory;
         }
 
         private int GetStundetId()
@@ -240,16 +231,69 @@ namespace StudentEducationSystem.Controllers
         private int GetTeacherIDForStudent()
         {
             int studentId = Convert.ToInt32(Session["StudentId"]);
-            int teacherID = context.Students.FirstOrDefault(x => x.Id == studentId).TeacherId;
+            int teacherID = _context.Students.FirstOrDefault(x => x.Id == studentId).TeacherId;
             return teacherID;
         }
-
         private bool IsToday(DateTime date)
         {
             return date.Day == DateTime.Now.Day && date.Month == DateTime.Now.Month && date.Year == DateTime.Now.Year;
         }
 
-        private int[] GetQuestionNumber(int categoryNumber)
+        private List<Exam> GetExamsWithStudentId(int studentId)
+        {
+            return _context.Exams.Where(x => x.StudentId == studentId).ToList();
+        }
+        private List<PerformanceCategory> GetPerformanceCategoriesForStudent(int studentId)  // Parametre olarak gelen id'ye sahip ogrencinin performance category tablosundaki kayitlarini dondurur.
+        {
+            return _context.PerformanceCategories.Where(x => x.StudentID == studentId).ToList();
+        }
+
+        private int[] GetAscendingRateCategoryIdsForExam(List<PerformanceCategory> performanceCategoryList) // Parametre olarak gelen performans kategori listesine gore, kategori id'leri basarimi en dusukten en yuksege seklinde sirali dizi olarak dondurur.
+        {
+            var categoryIds = new int[performanceCategoryList.Count];
+            double[] performance = new double[performanceCategoryList.Count];
+
+            var i = 0;
+            foreach (var category in performanceCategoryList)
+            {
+                double rate = 0.0;
+                if (category.FalseCounter != 0 && category.TrueCounter != 0)
+                    rate = category.TrueCounter / Convert.ToDouble(category.FalseCounter);
+                else if (category.TrueCounter == 0 && category.FalseCounter == 0)
+                    rate = 0;
+                else if (category.FalseCounter == 0)
+                    rate = category.TrueCounter + 1;
+                else if (category.TrueCounter == 0)
+                    rate = category.FalseCounter * -1;
+
+                performance[i] = rate;
+                categoryIds[i] = category.CategoryId;
+                i++;
+            }
+
+            SortArrayByAscendingRate(performance, categoryIds);
+
+            return categoryIds;
+        }
+
+        private void SortArrayByAscendingRate(double[] performance, int[] categoryIds)  // Parametre olarak gelen performance dizisini kucukten buyuge dogru siralar. Performance dizisinde yer degisikligi olduğu zaman ayni yer degisimini categoryIds dizisinde de gerceklestirir. Boylelikle categoryId ile performance orani ayni indislerde tutulmus olur.
+        {
+            var n = performance.Length;
+            for (var i = 0; i < n - 1; i++)
+            for (var j = 0; j < n - i - 1; j++)
+                if (performance[j] > performance[j + 1])
+                {
+                    var temp = performance[j];
+                    performance[j] = performance[j + 1];
+                    performance[j + 1] = temp;
+                    var temp2 = categoryIds[j];
+                    categoryIds[j] = categoryIds[j + 1];
+                    categoryIds[j + 1] = temp2;
+
+                }
+        }
+
+        private int[] GetDescendingCountOfQuestions(int categoryNumber) // Parametre olarak gelen kategori sayisina gore, 50 soruyu asimetrik sekilde parcalar. Bu metodun amaci basarima gore sorulacak soru sayisini belirlemektir. 
         {
             var avg = 50 / categoryNumber;
             var remain = 50 - categoryNumber * avg;
@@ -292,44 +336,101 @@ namespace StudentEducationSystem.Controllers
             return questionNumbers;
         }
 
-        private int[] GetCategoryIdsForExam(List<PerformanceCategory> performanceCategoryList)
+        private List<Question> GetFiftyQuestionsWithTeacherIdAndCategoryId(int teacherIdForStudent, int[] categoryIds, int[] countOfQuestion)  // Parametre olarak gelen teacherId'ye sahip ogretmenin eklemis oldugu ve categoryIds dizisindeki kategoriId'lere sahip, countOfQuestion dizisindeki sayilar kadar soru getirir. teacherId = 1, categoryIds[0] = 5, countOfQuestion[0] = 9 dersek teacherId = 1 ve kategoriId'si 5 olan sorulardan 9 tane getirir.
         {
-            var categoryIds = new int[performanceCategoryList.Count];
-            var performance = new double[performanceCategoryList.Count];
-
-            var i = 0;
-            foreach (var category in performanceCategoryList)
+            List<Question> questions = new List<Question>();
+            for (int i = 0; i < categoryIds.Length; i++)
             {
-                var rate = 0.0;
-                if (category.FalseCounter != 0 && category.TrueCounter != 0)
-                    rate = category.TrueCounter / Convert.ToDouble(category.FalseCounter);
-                else if (category.TrueCounter == 0 && category.FalseCounter == 0)
-                    rate = 0;
-                else if (category.FalseCounter == 0)
-                    rate = category.TrueCounter + 1;
-                else if (category.TrueCounter == 0)
-                    rate = -1;
+                int categoryId = categoryIds[i];
+                int count = countOfQuestion[i];
 
-                performance[i] = rate;
-                categoryIds[i] = category.CategoryId;
-                i++;
+                questions.AddRange(_context.Questions
+                    .Where(x => x.TeacherId == teacherIdForStudent && x.CategoryId == categoryId)
+                    .Take(count).ToList());
             }
 
-            var n = performance.Length;
-            for (i = 0; i < n - 1; i++)
-                for (var j = 0; j < n - i - 1; j++)
-                    if (performance[j] > performance[j + 1])
-                    {
-                        var temp = performance[j];
-                        performance[j] = performance[j + 1];
-                        performance[j + 1] = temp;
-                        var temp2 = categoryIds[j];
-                        categoryIds[j] = categoryIds[j + 1];
-                        categoryIds[j + 1] = temp2;
+            return questions;
+        }
 
+        private void MatchQuestionsToCategoryId(List<Question> questions, int[] categoryIds, int[] countOfQuestion, bool isFirstExam)  // Parametre olarak gelen sorulari key => soru, value => sorunun kategori id'si olacak sekilde _questionsIdList adli listeye ekler.
+        {
+            _questionsIdList = new Dictionary<int, int>();
+
+            if (!isFirstExam)
+            {
+                int countOfQue = 0;
+                for (int i = 0; i < categoryIds.Length; i++)
+                {
+                    for (int j = countOfQue; j < countOfQue + countOfQuestion[i]; j++)
+                    {
+                        _questionsIdList.Add(questions[j].Id, categoryIds[i]);
                     }
 
-            return categoryIds;
+                    countOfQue += countOfQuestion[i];
+                }
+            }
+            else
+            {
+                foreach (var item in questions)
+                {
+                    int categoryId = _context.Questions.FirstOrDefault(x => x.Id == item.Id).CategoryId;
+                    _questionsIdList.Add(item.Id, categoryId);
+                }
+            }
         }
+        private void ShuffleList<T>(List<T> list)
+        {
+            Random rand = new Random();
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rand.Next(n + 1);
+                var value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
+
+        private List<Question> GetFiftyRandomQuestionWithTeacherId(int teacherIdForStudent)
+        {
+            Random rand = new Random();
+            List<Question> questions = new List<Question>();
+            for (int i = 0; i < 50; i++)
+            {
+                var skip = (int)(rand.NextDouble() * _context.Questions.Count());
+
+                Question question = _context.Questions.OrderBy(x => x.TeacherId == teacherIdForStudent).Skip(skip).FirstOrDefault();
+
+                bool isSameQuestion = false;
+
+                foreach (var item in questions)
+                {
+                    if (question != null && item.Id.Equals(question.Id))
+                    {
+                        isSameQuestion = true;
+                        break;
+                    }
+                }
+
+                if (!isSameQuestion)
+                {
+                    questions.Add(question);
+                }
+                else
+                {
+                    i--;
+                    continue;
+                }
+            }
+
+            return questions;
+        }
+
+        private string GetRightAnswer(int questionId)
+        {
+            return _context.Questions.FirstOrDefault(x => x.Id == questionId).Answer;
+        }
+
     }
 }
