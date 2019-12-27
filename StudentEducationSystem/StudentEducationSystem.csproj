@@ -323,6 +323,7 @@
     <Content Include="Views\Question\Index.cshtml" />
     <Content Include="Views\Exam\TakeTheExam.cshtml" />
     <Content Include="Views\Statistic\Index.cshtml" />
+    <Content Include="Views\Statistic\ChartOfSuccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
