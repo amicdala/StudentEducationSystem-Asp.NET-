@@ -137,6 +137,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\CategoryExamStatisticModel.cs" />
     <Compile Include="Models\EducationSystemContext.cs" />
     <Compile Include="Models\EducationSystemInitializer.cs" />
     <Compile Include="Models\Exam.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Models\PerformanceCategory.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\Student.cs" />
+    <Compile Include="Models\StudentStatisticModel.cs" />
     <Compile Include="Models\Teacher.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -172,6 +174,7 @@
     <Content Include="Design\images\icon.jpg" />
     <Content Include="Design\images\question.jpg" />
     <Content Include="Design\images\student.png" />
+    <Content Include="Design\js\loader.js" />
     <Content Include="Design\js\studentSearchJS.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />

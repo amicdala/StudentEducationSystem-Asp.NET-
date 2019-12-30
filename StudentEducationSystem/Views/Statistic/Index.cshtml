@@ -1,44 +1,71 @@
-﻿@using System.Data.Entity
-@using StudentEducationSystem.Models
-@model StudentEducationSystem.Models.Exam
-
+﻿
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_StudentLayout.cshtml";
 
 }
-
+<script src="~/Design/js/loader.js"></script>
+<script src="~/Scripts/jquery-3.4.1.slim.min.js"></script>
 
 <div class="container">
     <div class="row my-4">
         <div class="col-lg-8 order-lg-2">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a href="" data-target="#chartofsuccess" data-toggle="tab" class="nav-link active">Başarım Oranlari</a>
+                    <a href="" data-target="#lastExamstatistic" data-toggle="tab" class="nav-link active">Son Sınav Grafiği</a>
                 </li>
                 <li class="nav-item">
-                    <a href="" data-target="#chartofchange" data-toggle="tab" class="nav-link">Değişim Grafiği</a>
+                    <a href="" data-target="#categoryStatistic" data-toggle="tab" class="nav-link">Kategorilere Göre Sınav Grafiği</a>
                 </li>
             </ul>
             <div class="tab-content py-4">
-                <div class="tab-pane active" id="chartofsuccess">
-                    <div class="form-group row">
-                        <div class="col-lg-9">
-                            @using (Html.BeginForm("Index", "Statistic", FormMethod.Post))
-                            {
-                                <strong class="col-lg-3 ml-1">Tarih:</strong>
-                                <input type="text" id="datepicker" class="pl-1" readonly="readonly" />
-                                <button type="submit" class="btn btn-info">Getir</button>
-                                <img src="@ViewBag.ChartOfSuccess" alt="ChartOfSuccess" />
-                            }
+                <div class="tab-pane active" id="lastExamstatistic">
+                    <h5 class="mb-3">Son 3 Sınav Grafiğiniz Baz Alınmıştır</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="box-body">
+                                <table class="columns">
+                                    <tr>
+                                        <td>
+                                            <div class="col-md-6" id="areachart_div"></div>
+                                        </td>
+
+                                    </tr>
+                                </table>
+                            </div>
+
+
                         </div>
-                        <br />
+
+
                     </div>
+                    <!--/row-->
                 </div>
 
-                <div class="tab-pane" id="chartofchange">
-                    <h5 class="mb-3"></h5>
-                    <img src="@ViewBag.ChartOfChange" alt="ChartOfChange" />
+                <div class="tab-pane" id="categoryStatistic">
+
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label form-control-label">Sınav Tarihleri</label>
+
+                        <div class="col-lg-9">
+                            @Html.DropDownList("ExamTimes", null, new { @class = "form-control input-lg", id = "examTimes" })
+
+                        </div>
+                        <br />
+                        <table class="columns">
+                            <tr>
+                                <td>
+                                    <div class="col-md-6" id="piechart_div"></div>
+                                </td>
+
+                            </tr>
+                        </table>
+
+
+                    </div>
+
+
+
                 </div>
             </div>
         </div>
@@ -46,23 +73,108 @@
     </div>
 </div>
 
-<link href="~/Content/jquery-ui.min.css" rel="stylesheet" />
-<script src="~/Scripts/jquery-3.4.1.min.js"></script>
-<script src="~/Scripts/jquery-ui.min.js"></script>
-<script>
-    $("#datepicker").datepicker({
-        dateFormat: "dd-mm-yy",
-        altFormat: "yymmdd",
-        maxDate: '0',
-        changeYear: true,
-        changeMonth: true,
-        monthNamesShort: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-        dayNamesMin: ["Pa", "Pt", "Sl", "Ça", "Pe", "Cu", "Ct"],
-        numberOfMonths: 1,
-        firstDay: 1
-    }).on('change', function () {
-        $(this).valid();
+<script type="text/javascript">
+    $("#examTimes").change(function () {
+        getCategoryExam();
     });
 
-    $("#datepicker").datepicker().datepicker("setDate", new Date());
+    function getCategoryExam() {
+        google.charts.load('current', {
+            packages: ['corechart']
+
+        }).then(function () {
+            var date = $("#examTimes").val();
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                url: '/Statistic/CategoryExam/?date=' + date,
+                success: function (result) {
+                    console.log(result);
+                    drawChart(result);
+                }
+            });
+
+
+            function drawChart(result) {
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Name');
+                data.addColumn('number', 'Point');
+
+                var dataArray = [];
+
+                $.each(result, function (i, obj) {
+                    dataArray.push([obj.Name, parseInt(obj.Point)]);
+
+                });
+
+                data.addRows(dataArray);
+
+                var piechart_options = {
+                    title: 'Öğrenci Performansı',
+                    width: 800,
+                    height: 600,
+                    is3D: true,
+                    animation: {
+                        duration: 100,
+                        easing: 'out',
+                    },
+                    vAxis: { minValue: 0, maxValue: 100 }
+
+                };
+                var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
+                piechart.draw(data, piechart_options);
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+
+    google.charts.load('current', {
+        packages: ['corechart']
+    }).then(function () {
+        $.ajax({
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                url: '@Url.Action("LastThreeExam", "Statistic")',
+                success: function (result) {
+                    console.log(result);
+                    drawChart(result);
+                }
+            });
+
+
+        function drawChart(result) {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Date');
+            data.addColumn('number', 'Point');
+
+            var dataArray = [];
+
+            $.each(result, function (i, obj) {
+                var date = new Date(parseInt(obj.Date))
+                dataArray.push([obj.Date.toString(),parseInt(obj.Point)]);
+
+            });
+
+            data.addRows(dataArray);
+
+            var areachart_options = {
+                title: 'Öğrenci Performansı',
+                width: 800,
+                height: 600,
+                is3D: true,
+                animation:{
+                    duration: 100,
+                    easing: 'out',
+                },
+                vAxis: {minValue:0, maxValue:100}
+
+            };
+            var areachart = new google.visualization.AreaChart(document.getElementById('areachart_div'));
+            areachart.draw(data, areachart_options);
+        }
+    });
+
 </script>
