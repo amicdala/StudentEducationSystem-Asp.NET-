@@ -157,7 +157,7 @@ namespace StudentEducationSystem.Controllers
                 }
                 else
                 {
-                    AddPerformanceCategory(performCategory);
+                    AddPerformanceCategory(performanceCategory);
                 }
             }
 
@@ -193,6 +193,7 @@ namespace StudentEducationSystem.Controllers
             }
             
             _context.SaveChanges();
+            ToastrService.AddToUserQueue("", "Sınavınız tamamlandı!", ToastrType.Info);
             return RedirectToAction("Index", "Student");
         }
 
