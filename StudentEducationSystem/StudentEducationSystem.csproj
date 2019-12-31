@@ -153,6 +153,7 @@
     <Compile Include="Services\Toastr\Toastr.cs" />
     <Compile Include="Services\Toastr\ToastrService.cs" />
     <Compile Include="Services\Toastr\ToastrType.cs" />
+    <Compile Include="Test\Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />

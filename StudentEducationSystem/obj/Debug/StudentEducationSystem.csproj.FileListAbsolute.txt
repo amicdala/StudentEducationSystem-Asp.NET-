@@ -240,7 +240,6 @@ C:\Users\oguzh\OneDrive\Masaüstü\3-1\Projects\TEST\Project\StudentEducationSys
 C:\Users\oguzh\OneDrive\Masaüstü\3-1\Projects\TEST\Project\StudentEducationSystem\StudentEducationSystem\bin\System.Web.WebPages.Deployment.xml
 C:\Users\oguzh\OneDrive\Masaüstü\3-1\Projects\TEST\Project\StudentEducationSystem\StudentEducationSystem\bin\System.Web.WebPages.Razor.xml
 C:\Users\oguzh\OneDrive\Masaüstü\3-1\Projects\TEST\Project\StudentEducationSystem\StudentEducationSystem\bin\Antlr3.Runtime.pdb
-C:\Users\oguzh\OneDrive\Masaüstü\3-1\Projects\TEST\Project\StudentEducationSystem\StudentEducationSystem\obj\Debug\StudentEducationSystem.csprojAssemblyReference.cache
 C:\Users\oguzh\OneDrive\Masaüstü\3-1\Projects\TEST\Project\StudentEducationSystem\StudentEducationSystem\obj\Debug\StudentEducationSystem.csproj.CopyComplete
 C:\Users\oguzh\OneDrive\Masaüstü\3-1\Projects\TEST\Project\StudentEducationSystem\StudentEducationSystem\obj\Debug\StudentEducationSystem.dll
 C:\Users\oguzh\OneDrive\Masaüstü\3-1\Projects\TEST\Project\StudentEducationSystem\StudentEducationSystem\obj\Debug\StudentEducationSystem.pdb
