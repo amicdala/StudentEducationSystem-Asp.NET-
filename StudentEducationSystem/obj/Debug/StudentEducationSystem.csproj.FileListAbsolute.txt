@@ -325,3 +325,4 @@ C:\Users\ASUS\OneDrive\Masaüstü\y\StudentEducationSystem\StudentEducationSyste
 C:\Users\ASUS\OneDrive\Masaüstü\y\StudentEducationSystem\StudentEducationSystem\obj\Debug\StudentEducationSystem.csproj.CopyComplete
 C:\Users\ASUS\OneDrive\Masaüstü\y\StudentEducationSystem\StudentEducationSystem\obj\Debug\StudentEducationSystem.dll
 C:\Users\ASUS\OneDrive\Masaüstü\y\StudentEducationSystem\StudentEducationSystem\obj\Debug\StudentEducationSystem.pdb
+C:\Users\oguzh\OneDrive\Masaüstü\3-1\Projects\TEST\Project\StudentEducationSystem\StudentEducationSystem\obj\Debug\StudentEducationSystem.csprojAssemblyReference.cache
