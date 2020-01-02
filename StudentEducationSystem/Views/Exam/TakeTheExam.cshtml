@@ -25,6 +25,8 @@
 ">
             @using (Html.BeginForm("TakeTheExam", "Exam", FormMethod.Post))
             {
+                Random rand = new Random();
+                int random = rand.Next();
                 @Html.AntiForgeryToken()
                 foreach (var question in Model)
                 {
@@ -40,62 +42,166 @@
                     var imgSrc = String.Format("data:image/gif;base64,{0}", data);
 
 
-                    <div class="card mx-1">
-                        @if (imgSrc.Length > 22)
-                        {
-                            <img src="@imgSrc" class="card-img-top" alt="soru">
-                        }
-                        <div class="card-body">
-                            <p class="card-title" style="text-align:center;">Soru : @i</p>
-                            <p class="card-text"><b>@question.Title</b></p>
-                        </div>
-                        <div class="form-check">
+            <div class="card mx-1">
+                @if (imgSrc.Length > 22)
+                {
+                    <img src="@imgSrc" class="card-img-top" alt="soru">
+                }
+                <div class="card-body">
+                    <p class="card-title" style="text-align:center;">Soru : @i</p>
+                    <p class="card-text"><b>@question.Title</b></p>
+                </div>
+                <div class="form-check">
 
-                        </div>
-                        <div class="form-check">
+                </div>
+                <div class="form-check">
 
-                        </div>
-                        <div class="form-check">
+                </div>
+                <div class="form-check">
 
-                        </div>
-
-                        <ul class="list-group list-group-flush">
-
-                            <li class="list-group-item mx-2">
-                                <label class="form-check-label" for="radio1">
-                                    <input type="radio" class="form-check-input" value="@question.Answer" name="@question.Id">@question.Answer
-                                </label>
-
-                            </li>
-                            <li class="list-group-item mx-2">
-                                <label class="form-check-label" for="radio2">
-                                    <input type="radio" class="form-check-input" value="@question.ChoiceOne" name="@question.Id">@question.ChoiceOne
-                                </label>
-
-                            </li>
-                            <li class="list-group-item mx-2">
-                                <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" value="@question.ChoiceTwo" name="@question.Id">@question.ChoiceTwo
-                                </label>
-
-                            </li>
-                            <li class="list-group-item mx-2">
-                                <label class="form-check-label" for="radio2">
-                                    <input type="radio" class="form-check-input" value="@question.ChoiceThree" name="@question.Id">@question.ChoiceThree
-                                </label>
-
-                            </li>
-                            <li class="list-group-item mx-2">
-                                <label class="form-check-label" for="radio2">
-                                    <input type="radio" class="form-check-input" value="@question.ChoiceFour" name="@question.Id">@question.ChoiceFour
-                                </label>
-
-                            </li>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @if (random % 2 == 0)
+                    {
 
 
-                        </ul>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio1">
+                                <input type="radio" class="form-check-input" value="@question.Answer" name="@question.Id">@question.Answer
+                            </label>
 
-                    </div>
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" value="@question.ChoiceOne" name="@question.Id">@question.ChoiceOne
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" value="@question.ChoiceTwo" name="@question.Id">@question.ChoiceTwo
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" value="@question.ChoiceThree" name="@question.Id">@question.ChoiceThree
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" value="@question.ChoiceFour" name="@question.Id">@question.ChoiceFour
+                            </label>
+
+                        </li>
+
+
+
+                    }
+                    else if (random % 3 == 0)
+                    {
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio1">
+                                <input type="radio" class="form-check-input" value="@question.ChoiceOne" name="@question.Id">@question.ChoiceOne
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" value="@question.Answer" name="@question.Id">@question.Answer
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" value="@question.ChoiceTwo" name="@question.Id">@question.ChoiceTwo
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" value="@question.ChoiceThree" name="@question.Id">@question.ChoiceThree
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" value="@question.ChoiceFour" name="@question.Id">@question.ChoiceFour
+                            </label>
+
+                        </li>
+                    }
+                    else if (random % 5 == 0)
+                    {
+
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" value="@question.ChoiceOne" name="@question.Id">@question.ChoiceOne
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" value="@question.ChoiceTwo" name="@question.Id">@question.ChoiceTwo
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio1">
+                                <input type="radio" class="form-check-input" value="@question.Answer" name="@question.Id">@question.Answer
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" value="@question.ChoiceThree" name="@question.Id">@question.ChoiceThree
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" value="@question.ChoiceFour" name="@question.Id">@question.ChoiceFour
+                            </label>
+
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" value="@question.ChoiceOne" name="@question.Id">@question.ChoiceOne
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" value="@question.ChoiceTwo" name="@question.Id">@question.ChoiceTwo
+                            </label>
+
+                        </li>
+
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" value="@question.ChoiceThree" name="@question.Id">@question.ChoiceThree
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio2">
+                                <input type="radio" class="form-check-input" value="@question.ChoiceFour" name="@question.Id">@question.ChoiceFour
+                            </label>
+
+                        </li>
+                        <li class="list-group-item mx-2">
+                            <label class="form-check-label" for="radio1">
+                                <input type="radio" class="form-check-input" value="@question.Answer" name="@question.Id">@question.Answer
+                            </label>
+
+                        </li>
+                    }
+                </ul>
+                </div>
                     <br />
                 }
                 <button type="submit" id="btnFinishExam" class="btn btn-primary">Cevapla</button>
