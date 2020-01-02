@@ -20,7 +20,7 @@ namespace StudentEducationSystem.Controllers
 
             if (exams.Count > 0)
             {
-                DateTime lastDate = exams.OrderByDescending(y => y.Date).ToList()[0].Date;
+                DateTime lastDate = exams.OrderByDescending(x => x.Id).ToList()[0].Date;
 
                 if (!IsToday(lastDate))
                 {
