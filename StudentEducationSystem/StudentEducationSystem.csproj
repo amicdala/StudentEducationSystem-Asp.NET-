@@ -170,6 +170,7 @@
     <Content Include="Content\toastr.min.css" />
     <Content Include="Design\css\form.css" />
     <Content Include="Design\css\loginForm.css" />
+    <Content Include="Design\css\mainForm.css" />
     <Content Include="Design\css\myStudentsStyle.css" />
     <Content Include="Design\css\teacherCard.css" />
     <Content Include="Design\css\teacherLayout.css" />
@@ -328,7 +329,6 @@
     <Content Include="Views\Question\Index.cshtml" />
     <Content Include="Views\Exam\TakeTheExam.cshtml" />
     <Content Include="Views\Statistic\Index.cshtml" />
-    <Content Include="Views\Statistic\ChartOfSuccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
