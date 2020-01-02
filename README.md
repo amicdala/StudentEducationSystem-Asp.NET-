@@ -19,3 +19,25 @@
 ### ✔ Kullanılan Teknolojiler :
 MVC Mimari ile ASP.NET, Bootstrap, Jquery
 
+### ✔ GRUP ÜYELERİ: 
+* Oğuzhan Kaymak
+* Muhammed Enes Oral 
+
+### 1️⃣ Giriş Ekranı :
+![login](https://user-images.githubusercontent.com/36153454/71653274-a6538300-2d3c-11ea-9924-4a7e5713e14d.png)
+
+### 2️⃣ Sınav Olma Ekranı :
+![Screenshot (48)](https://user-images.githubusercontent.com/36153454/71653356-e1ee4d00-2d3c-11ea-9273-ed689c59436c.png)
+
+### 3️⃣ Grafikleri Görüntüleme Ekranı :
+![Screenshot (55)](https://user-images.githubusercontent.com/36153454/71653375-034f3900-2d3d-11ea-923e-159bd1abde49.png)
+
+ ### 4️⃣ Öğretmen Sayfası :
+![Screenshot (50)](https://user-images.githubusercontent.com/36153454/71653395-21b53480-2d3d-11ea-939e-b543d7484d8c.png)
+
+### 5️⃣ Öğretmen Soru/Kategori Ekleme Ekranı :
+![Screenshot (52)](https://user-images.githubusercontent.com/36153454/71653449-82dd0800-2d3d-11ea-8d85-7757830ecc4e.png)
+
+
+![Screenshot (53)](https://user-images.githubusercontent.com/36153454/71653458-925c5100-2d3d-11ea-8a5d-93c10bba15f9.png)
+
